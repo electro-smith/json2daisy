@@ -67,8 +67,8 @@ def verify_param_used(component, params_in, params_out, params_in_original_name,
 	# Exclude parents, since they don't have 1-1 i/o mapping
 	if component.get('is_parent', False):
 		return True
-	for param in params_in | params_out:
-		root = get_root_component(param, (params_in_original_name | params_out_original_name)[param], components)
+	for param in {**params_in, **params_out}:
+		root = get_root_component(param, ({**params_in_original_name, **params_out_original_name})[param], components)
 		if root == component['name']:
 			return True
 	return False
@@ -145,7 +145,7 @@ def filter_map_set(set, key, match, key_exclude=None, match_exclude=None):
 
 def filter_map_ctrl(set, key, matches, init_key, key_exclude=None, match_exclude=None):
 	set = filter_matches(set, key, matches, key_exclude=key_exclude, match_exclude=match_exclude)
-	set = map(lambda x, i: x | {'i': i}, set, range(1000))
+	set = map(lambda x, i: {**x, 'i': i}, set, range(1000))
 	return "\n\t\t".join(map(lambda x: x[init_key].format_map(x), set))
 
 # filter out the components with a certain field, then fill in the template
