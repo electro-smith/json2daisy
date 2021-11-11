@@ -1,0 +1,44 @@
+
+
+#include "HeavyDaisy_patch_test.hpp"
+
+#define SAMPLE_RATE 48000.f
+
+using namespace daisy;
+
+Daisy hardware;
+
+Heavy_patch_test hv(SAMPLE_RATE);
+
+void ProcessControls();
+
+void audiocallback(daisy::AudioHandle::InputBuffer in, daisy::AudioHandle::OutputBuffer out, size_t size)
+{
+  hv.process((float**)in, (float**)out, size);
+  ProcessControls();
+  hardware.PostProcess();
+}
+
+static void sendHook(HeavyContextInterface *c, const char *receiverName, uint32_t receiverHash, const HvMessage * m) 
+{
+}
+
+int main(void)
+{
+  hardware.Init(true);
+  hardware.driver.StartAudio(audiocallback);
+
+  hv.setSendHook(sendHook);
+
+  for(;;)
+  {
+    hardware.Display();
+  }
+}
+
+void ProcessControls()
+{
+  hardware.ProcessAllControls();
+  hardware.CallbackWriteIn(hv);
+}
+
