@@ -2,6 +2,7 @@ import argparse
 import os
 import json
 import jinja2
+import pkg_resources
 from copy import deepcopy
 
 #############################################################
@@ -97,9 +98,8 @@ def de_alias(name, aliases, components):
 # helper for loading and processing the defaults, component list, etc
 def map_load(pair):
 	# load the default components
-	inpath = os.path.abspath(json_defaults_file)
-	infile = open(inpath, 'r').read()
-	component_defaults = json.loads(infile)
+	comp_string = pkg_resources.resource_string(__name__, json_defaults_file)
+	component_defaults = json.loads(comp_string)
 
 	pair[1]['name'] = pair[0]
 
@@ -186,7 +186,21 @@ def get_output_array(components):
 	output_comps = len(list(filter_match(components, 'direction', 'out')))
 	return 'float output_data[{output_comps}];'
 
-def generate_board(target, hpp_temp, cpp_temp, defaults, parameters=[], name='seed', class_name='', copyright='', meta={}):
+def generate_board(board_name, board_description_file, parameters=[], name='seed', class_name='', copyright='', meta={}):
+
+	if board_description_file != '':
+		try:
+			with open(board_description_file, 'rb') as file:
+				target = json.load(file)
+		except FileNotFoundError:
+			raise FileNotFoundError(f'Could not find board description file "{board_description_file}"')
+	else:
+		try:
+			default_description = pkg_resources.resource_string(__name__, os.path.join('resources', f'{board_name}.json'))
+			target = json.loads(default_description)
+		except FileNotFoundError:
+			raise FileNotFoundError(f'Unknown Daisy board "{board_name}"')
+
 	# flesh out target components:
 	components = target['components']
 	parents = target.get('parents', {})
@@ -195,6 +209,9 @@ def generate_board(target, hpp_temp, cpp_temp, defaults, parameters=[], name='se
 		parents[key]['is_parent'] = True
 	components.update(parents)
 
+	seed_defaults = os.path.join("resources", 'component_defaults.json')
+	patchsm_defaults = os.path.join("resources", 'component_defaults_patchsm.json')
+	defaults = {'seed': seed_defaults, 'patch_sm': patchsm_defaults}
 	driver = target.get('driver', 'seed')
 
 	global json_defaults_file
@@ -265,13 +282,6 @@ def generate_board(target, hpp_temp, cpp_temp, defaults, parameters=[], name='se
 	replacements['name'] = name
 	replacements['driver'] = driver
 	replacements['external_codecs'] = target.get('external_codecs', [])
-
-	replacements['bootloader'] = ''
-	if meta['daisy'].get('bootloader', False):
-		files = os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), "static"))
-		for file in files:
-			if 'dsy_bootloader' in file:
-				replacements['bootloader'] = f'../{file}'
 
 	replacements['linker_script'] = meta['daisy'].get('linker_script', '')
 	if replacements['linker_script'] != '':
@@ -380,19 +390,27 @@ def generate_board(target, hpp_temp, cpp_temp, defaults, parameters=[], name='se
 		
 
 	# initialize the jinja template environment
-	env = jinja2.Environment()
+	# loader = jinja2.PackageLoader(__name__)
+	# env = jinja2.Environment(loader=loader, trim_blocks=True, lstrip_blocks=True)
+	# rendered_hpp = env.get_template('HeavyDaisy.hpp').render(replacements)
+	# rendered_cpp = env.get_template('HeavyDaisy.cpp').render(replacements)
+	# rendered_make = env.get_template('Makefile').render(replacements)
+	env_opts = {"trim_blocks": True, "lstrip_blocks": True}
 
-	env.trim_blocks = True
-	env.lstrip_blocks = True
+	# this is a bit silly, but the PackageLoader seems a bit temperamental
+	hpp_str = pkg_resources.resource_string(__name__, os.path.join('templates', 'HeavyDaisy.hpp'))
+	hpp_env = jinja2.Environment(loader=jinja2.BaseLoader(), **env_opts).from_string(hpp_str.decode('utf-8'))
+	cpp_str = pkg_resources.resource_string(__name__, os.path.join('templates', 'HeavyDaisy.cpp'))
+	cpp_env = jinja2.Environment(loader=jinja2.BaseLoader(), **env_opts).from_string(cpp_str.decode('utf-8'))
+	make_str = pkg_resources.resource_string(__name__, os.path.join('templates', 'Makefile'))
+	make_env = jinja2.Environment(loader=jinja2.BaseLoader(), **env_opts).from_string(make_str.decode('utf-8'))
 
-	env.loader = jinja2.FileSystemLoader(
-			os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates"))
+	rendered_hpp = hpp_env.render(replacements)
+	rendered_cpp = cpp_env.render(replacements)
+	rendered_make = make_env.render(replacements)
+	
 
-	template_hpp = env.get_template(hpp_temp).render(replacements)
-	template_cpp = env.get_template(cpp_temp).render(replacements)
-	template_make = env.get_template("Makefile").render(replacements)
-
-	return template_hpp, template_cpp, template_make
+	return rendered_hpp, rendered_cpp, rendered_make
 
 # if __name__ == "__main__":
 # 	parser = argparse.ArgumentParser(description='Utility for generating board support files from JSON.')
