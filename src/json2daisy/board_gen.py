@@ -186,7 +186,7 @@ def get_output_array(components):
 	output_comps = len(list(filter_match(components, 'direction', 'out')))
 	return 'float output_data[{output_comps}];'
 
-def generate_board(board_name, board_description_file, parameters=[], name='seed', class_name='', copyright='', meta={}):
+def generate_board(board_name, board_description_file, parameters={}, name='seed', class_name='', copyright='', meta={}):
 
 	if board_description_file != '':
 		try:
@@ -387,17 +387,17 @@ def generate_board(board_name, board_description_file, parameters=[], name='seed
 		out_idx += 1
 
 	replacements['output_comps'] = len(replacements['output_parameters'])
-		
+	
+	env_opts = {"trim_blocks": True, "lstrip_blocks": True}
 
-	# initialize the jinja template environment
+	# Ideally, this would be what we use, but we'll need to get the jinja PackageLoader class working
 	# loader = jinja2.PackageLoader(__name__)
-	# env = jinja2.Environment(loader=loader, trim_blocks=True, lstrip_blocks=True)
+	# env = jinja2.Environment(loader=loader, **env_opts)
 	# rendered_hpp = env.get_template('HeavyDaisy.hpp').render(replacements)
 	# rendered_cpp = env.get_template('HeavyDaisy.cpp').render(replacements)
 	# rendered_make = env.get_template('Makefile').render(replacements)
-	env_opts = {"trim_blocks": True, "lstrip_blocks": True}
 
-	# this is a bit silly, but the PackageLoader seems a bit temperamental
+	# This following works, but is really annoying
 	hpp_str = pkg_resources.resource_string(__name__, os.path.join('templates', 'HeavyDaisy.hpp'))
 	hpp_env = jinja2.Environment(loader=jinja2.BaseLoader(), **env_opts).from_string(hpp_str.decode('utf-8'))
 	cpp_str = pkg_resources.resource_string(__name__, os.path.join('templates', 'HeavyDaisy.cpp'))
@@ -408,21 +408,5 @@ def generate_board(board_name, board_description_file, parameters=[], name='seed
 	rendered_hpp = hpp_env.render(replacements)
 	rendered_cpp = cpp_env.render(replacements)
 	rendered_make = make_env.render(replacements)
-	
 
 	return rendered_hpp, rendered_cpp, rendered_make
-
-# if __name__ == "__main__":
-# 	parser = argparse.ArgumentParser(description='Utility for generating board support files from JSON.')
-# 	parser.add_argument('json_input', help='Path to json file.')
-# 	parser.add_argument('-o', '--output', help='Path to output to. Defaults to board_support.h', default='HeavyDaisy')
-
-# 	args = parser.parse_args()
-# 	inpath = os.path.abspath(args.json_input)
-# 	outpath = os.path.abspath(args.output)
-
-# 	print('Generating Board File...')
-# 	infile = open(inpath, 'r').read()
-# 	template_hpp, template_cpp = generate_target_struct(infile)
-# 	open(outpath + '.hpp', 'w').write(template_hpp)
-# 	open(outpath + '.cpp', 'w').write(template_cpp)
