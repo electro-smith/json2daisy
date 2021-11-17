@@ -1,6 +1,6 @@
 {
 	"name": "patch_init",
-	"driver": "patch_sm",
+	"som": "patch_sm",
 	"defines": {},
 	"components": {
 		"cv_1": {
