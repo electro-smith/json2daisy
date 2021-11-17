@@ -1,6 +1,6 @@
 {
 	"Switch": {
-		"map_init": "{name}.Init(daisy::patch_sm::DaisyPatchSM::{pin}, driver.AudioCallbackRate(), {type}, {polarity}, {pull});",
+		"map_init": "{name}.Init(daisy::patch_sm::DaisyPatchSM::{pin}, som.AudioCallbackRate(), {type}, {polarity}, {pull});",
 		"typename": "daisy::Switch",
 		"direction": "in",
 		"pin": "a",
@@ -8,7 +8,7 @@
 		"polarity": "daisy::Switch::POLARITY_INVERTED",
 		"pull": "daisy::Switch::PULL_UP",
 		"process": "{name}.Debounce();",
-		"updaterate": "{name}.SetUpdateRate(driver.AudioCallbackRate());",
+		"updaterate": "{name}.SetUpdateRate(som.AudioCallbackRate());",
 		"mapping": [
 			{
 				"name": "{name}_press",
@@ -63,12 +63,12 @@
 		]
 	},
 	"Encoder": {
-		"map_init": "{name}.Init(daisy::patch_sm::DaisyPatchSM::{pin_a}, daisy::patch_sm::DaisyPatchSM::{pin_b}, daisy::patch_sm::DaisyPatchSM::{pin_click}, driver.AudioCallbackRate());",
+		"map_init": "{name}.Init(daisy::patch_sm::DaisyPatchSM::{pin_a}, daisy::patch_sm::DaisyPatchSM::{pin_b}, daisy::patch_sm::DaisyPatchSM::{pin_click}, som.AudioCallbackRate());",
 		"typename": "daisy::Encoder",
 		"direction": "in",
 		"pin": "a,b,click",
 		"process": "{name}.Debounce();",
-		"updaterate": "{name}.SetUpdateRate(driver.AudioCallbackRate());",
+		"updaterate": "{name}.SetUpdateRate(som.AudioCallbackRate());",
 		"mapping": [
 			{
 				"name": "{name}",
@@ -119,7 +119,7 @@
 		"typename": "daisy::GateIn",
 		"direction": "in",
 		"pin": "a",
-		"default_prefix": "driver.",
+		"default_prefix": "som.",
 		"mapping": [
 			{
 				"name": "{name}",
@@ -143,19 +143,19 @@
 	},
 	"AnalogControl": {
 		"init_single": "cfg[{i}].InitSingle(daisy::patch_sm::DaisyPatchSM::{pin});",
-		"map_init": "{name}.Init(driver.adc.GetPtr({i}), driver.AudioCallbackRate(), {flip}, {invert});",
+		"map_init": "{name}.Init(som.adc.GetPtr({i}), som.AudioCallbackRate(), {flip}, {invert});",
 		"typename": "daisy::AnalogControl",
 		"direction": "in",
 		"pin": "a",
 		"flip": "false",
 		"invert": "false",
-		"slew": "1.0/driver.AudioCallbackRate()",
+		"slew": "1.0/som.AudioCallbackRate()",
 		"process": "{name}.Process();",
-		"updaterate": "{name}.SetSampleRate(driver.AudioCallbackRate());",
+		"updaterate": "{name}.SetSampleRate(som.AudioCallbackRate());",
 		"mapping": [
 			{
 				"name": "{name}",
-				"get": "(driver.GetAdcValue((int)daisy::patch_sm::{name}))",
+				"get": "(som.GetAdcValue((int)daisy::patch_sm::{name}))",
 				"range": [
 					0,
 					1
@@ -213,7 +213,7 @@
 		"typename": "dsy_gpio",
 		"direction": "out",
 		"pin": "a",
-		"default_prefix": "driver.",
+		"default_prefix": "som.",
 		"mode": "DSY_GPIO_MODE_OUTPUT_PP",
 		"pull": "DSY_GPIO_NOPULL",
 		"mapping": [
@@ -224,7 +224,7 @@
 		]
 	},
 	"CVOuts": {
-		"map_init": "{name}.bitdepth = {bitdepth};\n\t\t{name}.buff_state = {buff_state};\n\t\t{name}.mode = {mode};\n\t\t{name}.chn = {channel};\n\t\tdriver.dac.Init({name});\n\t\tdriver.dac.WriteValue({channel}, 0);",
+		"map_init": "{name}.bitdepth = {bitdepth};\n\t\t{name}.buff_state = {buff_state};\n\t\t{name}.mode = {mode};\n\t\t{name}.chn = {channel};\n\t\tsom.dac.Init({name});\n\t\tsom.dac.WriteValue({channel}, 0);",
 		"typename": "daisy::DacHandle::Config",
 		"direction": "out",
 		"pin": "",
@@ -235,12 +235,12 @@
 		"mapping": [
 			{
 				"name": "{name}1",
-				"set": "driver.WriteCvOut(daisy::patch_sm::CV_OUT_1, {value} * 5.f);",
+				"set": "som.WriteCvOut(daisy::patch_sm::CV_OUT_1, {value} * 5.f);",
 				"where": "main"
 			},
 			{
 				"name": "{name}2",
-				"set": "driver.WriteCvOut(daisy::patch_sm::CV_OUT_2, {value} * 5.f);",
+				"set": "som.WriteCvOut(daisy::patch_sm::CV_OUT_2, {value} * 5.f);",
 				"where": "main"
 			}
 		]

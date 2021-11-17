@@ -1,7 +1,7 @@
-import json
-import pkg_resources
-import os 
 import jinja2
+import json
+import os
+import pkg_resources
 
 json_defaults_file = ''
 
@@ -47,21 +47,21 @@ def filter_has(set, key, key_exclude=None, match_exclude=None):
 # filter out the components we need, then map them onto the init for that part
 def filter_map_init(set, key, match, key_exclude=None, match_exclude=None):
 	filtered = filter_match(set, key, match, key_exclude=key_exclude, match_exclude=match_exclude)
-	return "\n\t\t".join(map(lambda x: x['map_init'].format_map(x), filtered)) 
+	return "\n    ".join(map(lambda x: x['map_init'].format_map(x), filtered)) 
 
 def filter_map_set(set, key, match, key_exclude=None, match_exclude=None):
 	filtered = filter_match(set, key, match, key_exclude=key_exclude, match_exclude=match_exclude)
-	return "\n\t\t".join(map(lambda x: x['mapping'][0]['set'].format_map(x['mapping'][0]['name'].format_map(x)), filtered))
+	return "\n    ".join(map(lambda x: x['mapping'][0]['set'].format_map(x['mapping'][0]['name'].format_map(x)), filtered))
 
 def filter_map_ctrl(set, key, matches, init_key, key_exclude=None, match_exclude=None):
 	set = filter_matches(set, key, matches, key_exclude=key_exclude, match_exclude=match_exclude)
 	set = map(lambda x, i: {**x, 'i': i}, set, range(1000))
-	return "\n\t\t".join(map(lambda x: x[init_key].format_map(x), set))
+	return "\n    ".join(map(lambda x: x[init_key].format_map(x), set))
 
 # filter out the components with a certain field, then fill in the template
 def filter_map_template(set, name, key_exclude=None, match_exclude=None):
 	filtered = filter_has(set, name, key_exclude=key_exclude, match_exclude=match_exclude)
-	return "\n\t\t".join(map(lambda x: x[name].format_map(x), filtered))
+	return "\n    ".join(map(lambda x: x[name].format_map(x), filtered))
 
 def flatten_pin_dicts(comp):
 	newcomp = {}
@@ -172,7 +172,7 @@ def generate_header(board_description_file):
   replacements['name'] = target['name']
   replacements['som'] = som
   replacements['external_codecs'] = target.get('external_codecs', [])
-  replacements['som_class'] = 'DaisySeed' if som == 'seed' else 'DaisyPatchSM'
+  replacements['som_class'] = 'daisy::DaisySeed' if som == 'seed' else 'daisy::patch_sm::DaisyPatchSM'
 
   # replacements['linker_script'] = meta['daisy'].get('linker_script', '')
   # if replacements['linker_script'] != '':
@@ -209,8 +209,8 @@ def generate_header(board_description_file):
   # replacements['callback_write_out'] = filter_map_set(components, 'direction', 'out')
   
   replacements['display'] = '// no display' if not 'display' in target else \
-    'daisy::OledDisplay<' + target['display']['driver'] + '>::Config display_config;\n\t\t' +\
-    'display_config.driver_config.transport_config.Defaults();\n\t\t' +\
+    'daisy::OledDisplay<' + target['display']['driver'] + '>::Config display_config;\n    ' +\
+    'display_config.driver_config.transport_config.Defaults();\n    ' +\
     "".join(map(lambda x: x, target['display'].get('config', {}))) +\
     'display.Init(display_config);\n'
 
@@ -225,10 +225,10 @@ def generate_header(board_description_file):
   component_declarations = list(filter(lambda x: not x.get('default', False), components))
   component_declarations = list(filter(lambda x: x.get('typename', '') != '', component_declarations))
   if len(component_declarations) > 0:
-    replacements['comps'] = ";\n\t".join(map(lambda x: x['typename'].format_map(x) + ' ' + x['name'], component_declarations)) + ';'
+    replacements['comps'] = ";\n  ".join(map(lambda x: x['typename'].format_map(x) + ' ' + x['name'], component_declarations)) + ';'
   non_class_declarations = list(filter(lambda x: 'non_class_decl' in x, component_declarations))
   if len(non_class_declarations) > 0:
-    replacements['non_class_declarations'] = "\n\t".join(map(lambda x: x['non_class_decl'].format_map(x), non_class_declarations))
+    replacements['non_class_declarations'] = "\n  ".join(map(lambda x: x['non_class_decl'].format_map(x), non_class_declarations))
 
   replacements['dispdec'] = ('daisy::OledDisplay<' + target['display']['driver'] + '> display;') if ('display' in target) else  "// no display"
 
@@ -245,17 +245,20 @@ def generate_header(board_description_file):
   # Ideally, this would be what we use, but we'll need to get the jinja PackageLoader class working
   # loader = jinja2.PackageLoader(__name__)
   # env = jinja2.Environment(loader=loader, **env_opts)
-  # rendered_hpp = env.get_template('HeavyDaisy.hpp').render(replacements)
-  # rendered_cpp = env.get_template('HeavyDaisy.cpp').render(replacements)
-  # rendered_make = env.get_template('Makefile').render(replacements)
+  # rendered_header = env.get_template('daisy.h').render(replacements)
 
   # This following works, but is really annoying
   header_str = pkg_resources.resource_string(__name__, os.path.join('templates', 'daisy.h'))
   header_env = jinja2.Environment(loader=jinja2.BaseLoader(), **env_opts).from_string(header_str.decode('utf-8'))
 
   rendered_header = header_env.render(replacements)
+  
+  # removing all unnecessary fields
+  for comp in components:
+    del comp['map_init']
+    del comp['typename']
 
-  return rendered_header # TODO -- add I/O data here
+  return rendered_header, target['name'], components
 
 if __name__ == '__main__':
   import argparse
@@ -263,8 +266,13 @@ if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Convert JSON board descriptions to C++ headers.')
   parser.add_argument('infile', type=str,
                       help='input JSON file')
+  parser.add_argument('-o', type=str, default=None,
+                      help='output file name')
   
   args = parser.parse_args()
-  outfile = generate_header(args.infile)
-  with open('output.h', 'w') as file:
-    file.write(outfile)
+  header, name, components = generate_header(args.infile)
+  outfile = args.o if args.o is not None else f'j2daisy_{name}.h'
+  with open(outfile, 'w') as file:
+    file.write(header)
+  
+  print(f'Generated Daisy C++ header in "{outfile}"')
