@@ -3,6 +3,8 @@ import pkg_resources
 import os 
 import jinja2
 
+json_defaults_file = ''
+
 # helper for loading and processing the defaults, component list, etc
 def map_load(pair):
 	# load the default components
@@ -170,6 +172,7 @@ def generate_header(board_description_file):
   replacements['name'] = target['name']
   replacements['som'] = som
   replacements['external_codecs'] = target.get('external_codecs', [])
+  replacements['som_class'] = 'DaisySeed' if som == 'seed' else 'DaisyPatchSM'
 
   # replacements['linker_script'] = meta['daisy'].get('linker_script', '')
   # if replacements['linker_script'] != '':
@@ -236,45 +239,6 @@ def generate_header(board_description_file):
   replacements['callback_write_out'] = ''
   replacements['loop_write_out'] = ''
   replacements['callback_write_in'] = []
-  out_idx = 0
-
-  # for param_name, param in params_in.items():
-  #   root = get_root_component(param_name, params_in_original_names[param_name], components)
-  #   component = list(filter_match(components, 'name', root))[0]
-  #   param_struct = {'hash': param['hash'], 'name': root, 'type': component['component'].upper()}
-  #   replacements['parameters'].append(param_struct)
-  #   mapping = get_component_mapping(param_name, params_in_original_names[param_name], component, components)
-
-    
-  #   write_location = 'callback_write_out' if mapping.get('where', 'callback') == 'callback' else 'loop_write_out'
-  #   component_info = deepcopy(component)
-  #   # A bit of a hack to get cv_1, etc to be written as CV_1
-  #   component_info['name'] = root.upper() if driver == 'patch_sm' and component['component'] == 'AnalogControl' else root
-  #   component_info['value'] = f'output_data[{out_idx}]'
-  #   component_info['default_prefix'] = component.get("default_prefix", '') if component.get('default', False) else ''
-  #   process = mapping["get"].format_map(component_info)
-
-  #   replacements['callback_write_in'].append({"process": process, "bool": mapping["bool"], "hash": param["hash"]})
-
-  # for param_name, param in params_out.items():
-  #   root = get_root_component(param_name, params_out_original_names[param_name], components)
-  #   component = list(filter_match(components, 'name', root))[0]
-  #   param_struct = {'hash': param['hash'], 'index': out_idx, 'name': param_name}
-  #   replacements['output_parameters'].append(param_struct)
-  #   mapping = get_component_mapping(param_name, params_out_original_names[param_name], component, components)
-
-  #   default_prefix = component.get("default_prefix", '') if component.get('default', False) else ''
-  #   write_location = 'callback_write_out' if mapping.get('where', 'callback') == 'callback' else 'loop_write_out'
-  #   component_info = deepcopy(component)
-  #   component_info['name'] = root
-  #   component_info['value'] = f'output_data[{out_idx}]'
-  #   component_info['default_prefix'] = default_prefix
-  #   write = mapping["set"].format_map(component_info)
-
-  #   replacements[write_location] += f'\n\t\t{write}'
-  #   out_idx += 1
-
-  replacements['output_comps'] = len(replacements['output_parameters'])
   
   env_opts = {"trim_blocks": True, "lstrip_blocks": True}
 

@@ -1,5 +1,5 @@
-#ifndef __Daisy_{{name}}_H__
-#define __Daisy_{{name}}_H__
+#ifndef __JSON2DAISY_{{name|upper}}_H__
+#define __JSON2DAISY_{{name|upper}}_H__
 
 {% if som == 'seed' %}
 #include "daisy_seed.h"
@@ -11,10 +11,10 @@ struct Daisy{{ name|capitalize }} {
 
   void Init(bool boost=true) {
     {% if som == 'seed' %}
-      som.Configure();
- 		  som.Init(boost);
+    som.Configure();
+    som.Init(boost);
     {% else %}
-      som.Init();
+    som.Init();
     {% endif %}
 
     {{init}}
@@ -119,4 +119,4 @@ struct Daisy{{ name|capitalize }} {
 
 };
 
-#endif // __Daisy_{name}_H__
+#endif // __JSON2DAISY_{{name|upper}}_H__
