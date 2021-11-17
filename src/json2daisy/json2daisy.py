@@ -96,7 +96,7 @@ def get_output_array(components):
 	output_comps = len(list(filter_match(components, 'direction', 'out')))
 	return 'float output_data[{output_comps}];'
 
-def generate_header(board_description_file):
+def generate_header(board_description_dict):
 
   # if board_description_file != '':
   #   try:
@@ -110,8 +110,9 @@ def generate_header(board_description_file):
   #     target = json.loads(default_description)
   #   except FileNotFoundError:
   #     raise FileNotFoundError(f'Unknown Daisy board "{board_name}"')
-  with open(board_description_file, 'rb') as file:
-    target = json.load(file)
+  # with open(board_description_file, 'rb') as file:
+  #   target = json.load(file)
+  target = board_description_dict
   
   # flesh out target components:
   components = target['components']
@@ -255,22 +256,44 @@ def generate_header(board_description_file):
   
   # removing all unnecessary fields
   for comp in components:
-    del comp['map_init']
-    del comp['typename']
+    if 'map_init' in comp:
+      del comp['map_init']
+    if 'typename' in comp:
+      del comp['typename']
 
   return rendered_header, target['name'], components
+
+def generate_header_from_file(description_file):
+  with open(description_file, 'rb') as file:
+    daisy_description = json.load(file)
+  
+  return generate_header(daisy_description)
+
+def generate_header_from_name(board_name):
+  try:
+    description_file = os.path.join('resources', f'{board_name}.json')
+    daisy_description = pkg_resources.resource_string(__name__, description_file)
+    daisy_description = json.loads(daisy_description)
+  except FileNotFoundError:
+    raise FileNotFoundError(f'Unknown Daisy board "{board_name}"')
+  
+  return generate_header(daisy_description)
 
 if __name__ == '__main__':
   import argparse
 
   parser = argparse.ArgumentParser(description='Convert JSON board descriptions to C++ headers.')
-  parser.add_argument('infile', type=str,
-                      help='input JSON file')
+  parser.add_argument('source', type=str,
+                      help='Daisy board name or path to JSON board description (e.g. "patch" or "path/to/patch.json")')
   parser.add_argument('-o', type=str, default=None,
                       help='output file name')
   
   args = parser.parse_args()
-  header, name, components = generate_header(args.infile)
+  if args.source[-5:] == '.json':
+    header, name, components = generate_header_from_file(args.source)
+  else:
+    header, name, components = generate_header_from_name(args.source)
+    
   outfile = args.o if args.o is not None else f'j2daisy_{name}.h'
   with open(outfile, 'w') as file:
     file.write(header)
