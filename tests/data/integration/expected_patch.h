@@ -1,9 +1,39 @@
+/*
+ * MIT License
+ * 
+ * Copyright (c) 2021 Electrosmith
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 #ifndef __JSON2DAISY_PATCH_H__
 #define __JSON2DAISY_PATCH_H__
 
 #include "daisy_seed.h"
+#include "dev/codec_ak4556.h"
+#include "dev/oled_ssd130x.h"
+
+#define ANALOG_COUNT 4
 
 namespace json2daisy {
+
+
 
 struct DaisyPatch {
 
@@ -60,48 +90,50 @@ struct DaisyPatch {
     daisy::OledDisplay<daisy::SSD130x4WireSpi128x64Driver>::Config display_config;
     display_config.driver_config.transport_config.Defaults();
     display.Init(display_config);
+    display.Fill(0);
+    display.Update();
  
 
     // External Codec Initialization
-    SaiHandle::Config sai_config[2];
+    daisy::SaiHandle::Config sai_config[2];
 
     // Internal Codec
-    sai_config[0].periph          = SaiHandle::Config::Peripheral::SAI_1;
-    sai_config[0].sr              = SaiHandle::Config::SampleRate::SAI_48KHZ;
-    sai_config[0].bit_depth       = SaiHandle::Config::BitDepth::SAI_24BIT;
-    sai_config[0].a_sync          = SaiHandle::Config::Sync::MASTER;
-    sai_config[0].b_sync          = SaiHandle::Config::Sync::SLAVE;
-    sai_config[0].a_dir           = SaiHandle::Config::Direction::TRANSMIT;
-    sai_config[0].b_dir           = SaiHandle::Config::Direction::RECEIVE;
+    sai_config[0].periph          = daisy::SaiHandle::Config::Peripheral::SAI_1;
+    sai_config[0].sr              = daisy::SaiHandle::Config::SampleRate::SAI_48KHZ;
+    sai_config[0].bit_depth       = daisy::SaiHandle::Config::BitDepth::SAI_24BIT;
+    sai_config[0].a_sync          = daisy::SaiHandle::Config::Sync::MASTER;
+    sai_config[0].b_sync          = daisy::SaiHandle::Config::Sync::SLAVE;
+    sai_config[0].a_dir           = daisy::SaiHandle::Config::Direction::TRANSMIT;
+    sai_config[0].b_dir           = daisy::SaiHandle::Config::Direction::RECEIVE;
     sai_config[0].pin_config.fs   = {DSY_GPIOE, 4};
     sai_config[0].pin_config.mclk = {DSY_GPIOE, 2};
     sai_config[0].pin_config.sck  = {DSY_GPIOE, 5};
     sai_config[0].pin_config.sa   = {DSY_GPIOE, 6};
     sai_config[0].pin_config.sb   = {DSY_GPIOE, 3};
 
-    sai_config[1].periph          = SaiHandle::Config::Peripheral::SAI_2;
-    sai_config[1].sr              = SaiHandle::Config::SampleRate::SAI_48KHZ;
-    sai_config[1].bit_depth       = SaiHandle::Config::BitDepth::SAI_24BIT;
-    sai_config[1].a_sync          = SaiHandle::Config::Sync::SLAVE;
-    sai_config[1].b_sync          = SaiHandle::Config::Sync::MASTER;
-    sai_config[1].a_dir           = SaiHandle::Config::Direction::TRANSMIT;
-    sai_config[1].b_dir           = SaiHandle::Config::Direction::RECEIVE;
+    sai_config[1].periph          = daisy::SaiHandle::Config::Peripheral::SAI_2;
+    sai_config[1].sr              = daisy::SaiHandle::Config::SampleRate::SAI_48KHZ;
+    sai_config[1].bit_depth       = daisy::SaiHandle::Config::BitDepth::SAI_24BIT;
+    sai_config[1].a_sync          = daisy::SaiHandle::Config::Sync::SLAVE;
+    sai_config[1].b_sync          = daisy::SaiHandle::Config::Sync::MASTER;
+    sai_config[1].a_dir           = daisy::SaiHandle::Config::Direction::TRANSMIT;
+    sai_config[1].b_dir           = daisy::SaiHandle::Config::Direction::RECEIVE;
     sai_config[1].pin_config.fs   = som.GetPin(27);
     sai_config[1].pin_config.mclk = som.GetPin(24);
     sai_config[1].pin_config.sck  = som.GetPin(28);
     sai_config[1].pin_config.sa   = som.GetPin(26);
     sai_config[1].pin_config.sb   = som.GetPin(25);
 
-    SaiHandle sai_handle[2];
+    daisy::SaiHandle sai_handle[2];
     sai_handle[0].Init(sai_config[0]);
     sai_handle[1].Init(sai_config[1]);
 
     dsy_gpio_pin codec_reset_pin = som.GetPin(29);
-    Ak4556::Init(codec_reset_pin);
+    daisy::Ak4556::Init(codec_reset_pin);
 
-    AudioHandle::Config cfg;
+    daisy::AudioHandle::Config cfg;
     cfg.blocksize  = 48;
-    cfg.samplerate = SaiHandle::Config::SampleRate::SAI_48KHZ;
+    cfg.samplerate = daisy::SaiHandle::Config::SampleRate::SAI_48KHZ;
     cfg.postgain   = 0.5f;
     som.audio_handle.Init(
       cfg, 
@@ -130,17 +162,17 @@ struct DaisyPatch {
    */
   void SetAudioSampleRate(size_t sample_rate) 
   {
-    SaiHandle::Config::SampleRate enum_rate;
+    daisy::SaiHandle::Config::SampleRate enum_rate;
     if (sample_rate >= 96000)
-      enum_rate = SAI_96KHZ;
+      enum_rate = daisy::SaiHandle::Config::SampleRate::SAI_96KHZ;
     else if (sample_rate >= 48000)
-      enum_rate = SAI_48KHZ;
+      enum_rate = daisy::SaiHandle::Config::SampleRate::SAI_48KHZ;
     else if (sample_rate >= 32000)
-      enum_rate = SAI_32KHZ;
+      enum_rate = daisy::SaiHandle::Config::SampleRate::SAI_32KHZ;
     else if (sample_rate >= 16000)
-      enum_rate = SAI_16KHZ;
+      enum_rate = daisy::SaiHandle::Config::SampleRate::SAI_16KHZ;
     else
-      enum_rate = SAI_8KHZ;
+      enum_rate = daisy::SaiHandle::Config::SampleRate::SAI_8KHZ;
     som.SetAudioSampleRate(enum_rate);
     knob1.SetSampleRate(som.AudioCallbackRate());
     knob2.SetSampleRate(som.AudioCallbackRate());
@@ -160,7 +192,7 @@ struct DaisyPatch {
   /** Starts up the audio callback process with the given callback
    * 
    */
-  inline void StartAudio(AudioHandle::AudioCallback cb)
+  inline void StartAudio(daisy::AudioHandle::AudioCallback cb)
   {
     som.StartAudio(cb);
   }
@@ -168,6 +200,7 @@ struct DaisyPatch {
   /** This is the board's "System On Module"
    */
   daisy::DaisySeed som;
+  daisy::AdcChannelConfig cfg[ANALOG_COUNT];
 
   // I/O Components
   daisy::AnalogControl knob1;

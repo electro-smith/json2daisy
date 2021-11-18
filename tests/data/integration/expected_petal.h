@@ -1,9 +1,39 @@
+/*
+ * MIT License
+ * 
+ * Copyright (c) 2021 Electrosmith
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 #ifndef __JSON2DAISY_PETAL_H__
 #define __JSON2DAISY_PETAL_H__
 
 #include "daisy_seed.h"
+#include "dev/codec_ak4556.h"
+
+
+#define ANALOG_COUNT 7
 
 namespace json2daisy {
+
+LedDriverPca9685<2, true>::DmaBuffer DMA_BUFFER_MEM_SECTION led_driver_dma_buffer_a, led_driver_dma_buffer_b;
 
 struct DaisyPetal {
 
@@ -86,17 +116,17 @@ struct DaisyPetal {
    */
   void SetAudioSampleRate(size_t sample_rate) 
   {
-    SaiHandle::Config::SampleRate enum_rate;
+    daisy::SaiHandle::Config::SampleRate enum_rate;
     if (sample_rate >= 96000)
-      enum_rate = SAI_96KHZ;
+      enum_rate = daisy::SaiHandle::Config::SampleRate::SAI_96KHZ;
     else if (sample_rate >= 48000)
-      enum_rate = SAI_48KHZ;
+      enum_rate = daisy::SaiHandle::Config::SampleRate::SAI_48KHZ;
     else if (sample_rate >= 32000)
-      enum_rate = SAI_32KHZ;
+      enum_rate = daisy::SaiHandle::Config::SampleRate::SAI_32KHZ;
     else if (sample_rate >= 16000)
-      enum_rate = SAI_16KHZ;
+      enum_rate = daisy::SaiHandle::Config::SampleRate::SAI_16KHZ;
     else
-      enum_rate = SAI_8KHZ;
+      enum_rate = daisy::SaiHandle::Config::SampleRate::SAI_8KHZ;
     som.SetAudioSampleRate(enum_rate);
     knob1.SetSampleRate(som.AudioCallbackRate());
     knob2.SetSampleRate(som.AudioCallbackRate());
@@ -126,7 +156,7 @@ struct DaisyPetal {
   /** Starts up the audio callback process with the given callback
    * 
    */
-  inline void StartAudio(AudioHandle::AudioCallback cb)
+  inline void StartAudio(daisy::AudioHandle::AudioCallback cb)
   {
     som.StartAudio(cb);
   }
@@ -134,6 +164,7 @@ struct DaisyPetal {
   /** This is the board's "System On Module"
    */
   daisy::DaisySeed som;
+  daisy::AdcChannelConfig cfg[ANALOG_COUNT];
 
   // I/O Components
   daisy::AnalogControl knob1;
