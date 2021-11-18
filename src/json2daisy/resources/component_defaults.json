@@ -12,7 +12,7 @@
 		"mapping": [
 			{
 				"name": "{name}_press",
-				"get": "({name}.Pressed()?1.f:0.f)",
+				"get": "({class_name}.{name}.Pressed()?1.f:0.f)",
 				"range": [
 					0,
 					1
@@ -21,7 +21,7 @@
 			},
 			{
 				"name": "{name}",
-				"get": "({name}.RisingEdge()?1.f:0.f)",
+				"get": "({class_name}.{name}.RisingEdge()?1.f:0.f)",
 				"range": [
 					0,
 					1
@@ -30,7 +30,7 @@
 			},
 			{
 				"name": "{name}_fall",
-				"get": "({name}.FallingEdge()?1.f:0.f)",
+				"get": "({class_name}.{name}.FallingEdge()?1.f:0.f)",
 				"range": [
 					0,
 					1
@@ -39,7 +39,7 @@
 			},
 			{
 				"name": "{name}_seconds",
-				"get": "({name}.TimeHeldMs()*0.001f)",
+				"get": "({class_name}.{name}.TimeHeldMs()*0.001f)",
 				"range": null,
 				"bool": false
 			}
@@ -53,7 +53,7 @@
 		"mapping": [
 			{
 				"name": "{name}",
-				"get": "({name}.Read()*0.5f+0.5f)",
+				"get": "({class_name}.{name}.Read()*0.5f+0.5f)",
 				"range": [
 					0,
 					2
@@ -72,7 +72,7 @@
 		"mapping": [
 			{
 				"name": "{name}",
-				"get": "({name}.Increment())",
+				"get": "({class_name}.{name}.Increment())",
 				"range": [
 					-1,
 					1
@@ -81,7 +81,7 @@
 			},
 			{
 				"name": "{name}_press",
-				"get": "({name}.Pressed()?1.f:0.f)",
+				"get": "({class_name}.{name}.Pressed()?1.f:0.f)",
 				"range": [
 					0,
 					1
@@ -90,7 +90,7 @@
 			},
 			{
 				"name": "{name}_rise",
-				"get": "({name}.RisingEdge()?1.f:0.f)",
+				"get": "({class_name}.{name}.RisingEdge()?1.f:0.f)",
 				"range": [
 					0,
 					1
@@ -99,7 +99,7 @@
 			},
 			{
 				"name": "{name}_fall",
-				"get": "({name}.FallingEdge()?1.f:0.f)",
+				"get": "({class_name}.{name}.FallingEdge()?1.f:0.f)",
 				"range": [
 					0,
 					1
@@ -108,7 +108,7 @@
 			},
 			{
 				"name": "{name}_seconds",
-				"get": "({name}.TimeHeldMs()*0.001f)",
+				"get": "({class_name}.{name}.TimeHeldMs()*0.001f)",
 				"range": null,
 				"bool": false
 			}
@@ -122,7 +122,7 @@
 		"mapping": [
 			{
 				"name": "{name}",
-				"get": "({name}.State()?1.f:0.f)",
+				"get": "({class_name}.{name}.State()?1.f:0.f)",
 				"range": [
 					0,
 					1
@@ -131,7 +131,7 @@
 			},
 			{
 				"name": "{name}_trig",
-				"get": "({name}.Trig()?1.f:0.f)",
+				"get": "({class_name}.{name}.Trig()?1.f:0.f)",
 				"range": [
 					0,
 					1
@@ -154,7 +154,7 @@
 		"mapping": [
 			{
 				"name": "{name}",
-				"get": "({name}.Value())",
+				"get": "({class_name}.{name}.Value())",
 				"range": [
 					0,
 					1
@@ -173,7 +173,7 @@
 		"mapping": [
 			{
 				"name": "{name}",
-				"set": "{name}.Set({value});"
+				"set": "{class_name}.{name}.Set({value});"
 			}
 		]
 	},
@@ -187,23 +187,23 @@
 		"mapping": [
 			{
 				"name": "{name}_red",
-				"set": "{name}.SetRed({value});"
+				"set": "{class_name}.{name}.SetRed({value});"
 			},
 			{
 				"name": "{name}_green",
-				"set": "{name}.SetGreen({value});"
+				"set": "{class_name}.{name}.SetGreen({value});"
 			},
 			{
 				"name": "{name}_blue",
-				"set": "{name}.SetBlue({value});"
+				"set": "{class_name}.{name}.SetBlue({value});"
 			},
 			{
 				"name": "{name}",
-				"set": "{name}.Set(clamp(-{value}, 0.f, 1.f), 0.f, clamp({value}, 0.f, 1.f));"
+				"set": "{class_name}.{name}.Set(clamp(-{value}, 0.f, 1.f), 0.f, clamp({value}, 0.f, 1.f));"
 			},
 			{
 				"name": "{name}_white",
-				"set": "{name}.Set({value},{value},{value});"
+				"set": "{class_name}.{name}.Set({value},{value},{value});"
 			}
 		]
 	},
@@ -217,7 +217,7 @@
 		"mapping": [
 			{
 				"name": "{name}",
-				"set": "dsy_gpio_write(&{name}, {value});"
+				"set": "dsy_gpio_write(&{class_name}.{name}, {value});"
 			}
 		]
 	},
@@ -233,12 +233,12 @@
 		"mapping": [
 			{
 				"name": "{name}1",
-				"set": "som.dac.WriteValue(daisy::DacHandle::Channel::ONE, {value} * 4095);",
+				"set": "{class_name}.som.dac.WriteValue(daisy::DacHandle::Channel::ONE, {value} * 4095);",
 				"where": "main"
 			},
 			{
 				"name": "{name}2",
-				"set": "som.dac.WriteValue(daisy::DacHandle::Channel::TWO, {value} * 4095);",
+				"set": "{class_name}.som.dac.WriteValue(daisy::DacHandle::Channel::TWO, {value} * 4095);",
 				"where": "main"
 			}
 		]
@@ -272,7 +272,7 @@
 		"mapping": [
 			{
 				"name": "{name}",
-				"set": "{parent}.SetLed({index}, {value});"
+				"set": "{class_name}.{parent}.SetLed({index}, {value});"
 			}
 		]
 	},
@@ -290,23 +290,23 @@
 		"mapping": [
 			{
 				"name": "{name}_red",
-				"set": "{parent}.SetLed({index_red}, {value});"
+				"set": "{class_name}.{parent}.SetLed({index_red}, {value});"
 			},
 			{
 				"name": "{name}_green",
-				"set": "{parent}.SetLed({index_green}, {value});"
+				"set": "{class_name}.{parent}.SetLed({index_green}, {value});"
 			},
 			{
 				"name": "{name}_blue",
-				"set": "{parent}.SetLed({index_blue}, {value});"
+				"set": "{class_name}.{parent}.SetLed({index_blue}, {value});"
 			},
 			{
 				"name": "{name}",
-				"set": "{parent}.SetLed({index_red}, {value});\n    {parent}.SetLed({index_green}, {value});\n    {parent}.SetLed({index_blue}, {value});"
+				"set": "{class_name}.{parent}.SetLed({index_red}, {value});\n    {class_name}.{parent}.SetLed({index_green}, {value});\n    {class_name}.{parent}.SetLed({index_blue}, {value});"
 			},
 			{
 				"name": "{name}_white",
-				"set": "{parent}.SetLed({index_red}, {value});\n    {parent}.SetLed({index_green}, {value});\n    {parent}.SetLed({index_blue}, {value});"
+				"set": "{class_name}.{parent}.SetLed({index_red}, {value});\n    {class_name}.{parent}.SetLed({index_green}, {value});\n    {class_name}.{parent}.SetLed({index_blue}, {value});"
 			}
 		]
 	},
@@ -329,17 +329,17 @@
 		"mapping": [
 			{
 				"name": "{name}",
-				"get": "({parent}_debounced[{index}] == 1)",
+				"get": "({class_name}.{parent}_debounced[{index}] == 1)",
 				"bool": true
 			},
 			{
 				"name": "{name}_press",
-				"get": "({parent}_debounced[{index}] != 0)",
+				"get": "({class_name}.{parent}_debounced[{index}] != 0)",
 				"bool": false
 			},
 			{
 				"name": "{name}_fall",
-				"get": "({parent}_debounced[{index}] == 0b10000000)",
+				"get": "({class_name}.{parent}_debounced[{index}] == 0b10000000)",
 				"bool": true
 			}
 		]
@@ -365,7 +365,7 @@
 		"mapping": [
 			{
 				"name": "{name}",
-				"get": "({name}.Value())",
+				"get": "({class_name}.{name}.Value())",
 				"range": [
 					0,
 					1
@@ -386,7 +386,7 @@
 		"mapping": [
 			{
 				"name": "{name}",
-				"get": "({name}.Value())",
+				"get": "({class_name}.{name}.Value())",
 				"range": [
 					0,
 					1
