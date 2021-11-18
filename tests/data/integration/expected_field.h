@@ -124,7 +124,20 @@ struct DaisyField {
     else
       enum_rate = SAI_8KHZ;
     som.SetAudioSampleRate(enum_rate);
-    
+    cv1.SetSampleRate(som.AudioCallbackRate());
+    cv2.SetSampleRate(som.AudioCallbackRate());
+    cv3.SetSampleRate(som.AudioCallbackRate());
+    cv4.SetSampleRate(som.AudioCallbackRate());
+    knob1.SetSampleRate(som.AudioCallbackRate());
+    knob2.SetSampleRate(som.AudioCallbackRate());
+    knob3.SetSampleRate(som.AudioCallbackRate());
+    knob4.SetSampleRate(som.AudioCallbackRate());
+    knob5.SetSampleRate(som.AudioCallbackRate());
+    knob6.SetSampleRate(som.AudioCallbackRate());
+    knob7.SetSampleRate(som.AudioCallbackRate());
+    knob8.SetSampleRate(som.AudioCallbackRate());
+    sw1.SetUpdateRate(som.AudioCallbackRate());
+    sw2.SetUpdateRate(som.AudioCallbackRate());
   }
 
   /** Sets the audio block size

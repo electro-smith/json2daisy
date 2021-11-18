@@ -43,14 +43,14 @@ class TestIntegration(unittest.TestCase):
 test_template = """
     def test_{name}(self):
         self.maxDiff = None
-        header, name, components = json2daisy.generate_header_from_name('{name}')
+        header, name, components, aliases = json2daisy.generate_header_from_name('{name}')
         with open(path.join(data_path, 'integration', 'expected_{name}.h'), 'r') as file:
           self.assertEqual(header, file.read(), 'The output string should match "expected_{name}.h" exactly')
 """
 
 for template_name in included_json:
   if template_name not in non_templates:
-    header, name, components = json2daisy.generate_header_from_name(template_name)
+    header, name, components, aliases = json2daisy.generate_header_from_name(template_name)
     template_test_path = path.join('integration', f'expected_{name}.h')
     with open(path.join(data_path, template_test_path), 'w') as file:
       file.write(header)

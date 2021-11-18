@@ -41,7 +41,8 @@ struct DaisyPatch_init {
   void SetAudioSampleRate(size_t sample_rate) 
   {
     som.SetAudioSampleRate(sample_rate);
-    
+    sw1.SetUpdateRate(som.AudioCallbackRate());
+    sw2.SetUpdateRate(som.AudioCallbackRate());
   }
 
   /** Sets the audio block size

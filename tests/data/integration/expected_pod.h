@@ -93,7 +93,11 @@ struct DaisyPod {
     else
       enum_rate = SAI_8KHZ;
     som.SetAudioSampleRate(enum_rate);
-    
+    knob1.SetSampleRate(som.AudioCallbackRate());
+    knob2.SetSampleRate(som.AudioCallbackRate());
+    encoder.SetUpdateRate(som.AudioCallbackRate());
+    sw1.SetUpdateRate(som.AudioCallbackRate());
+    sw2.SetUpdateRate(som.AudioCallbackRate());
   }
 
   /** Sets the audio block size

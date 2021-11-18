@@ -142,7 +142,11 @@ struct DaisyPatch {
     else
       enum_rate = SAI_8KHZ;
     som.SetAudioSampleRate(enum_rate);
-    
+    knob1.SetSampleRate(som.AudioCallbackRate());
+    knob2.SetSampleRate(som.AudioCallbackRate());
+    knob3.SetSampleRate(som.AudioCallbackRate());
+    knob4.SetSampleRate(som.AudioCallbackRate());
+    encoder.SetUpdateRate(som.AudioCallbackRate());
   }
 
   /** Sets the audio block size

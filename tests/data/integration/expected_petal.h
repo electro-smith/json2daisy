@@ -98,7 +98,21 @@ struct DaisyPetal {
     else
       enum_rate = SAI_8KHZ;
     som.SetAudioSampleRate(enum_rate);
-    
+    knob1.SetSampleRate(som.AudioCallbackRate());
+    knob2.SetSampleRate(som.AudioCallbackRate());
+    knob3.SetSampleRate(som.AudioCallbackRate());
+    knob4.SetSampleRate(som.AudioCallbackRate());
+    knob5.SetSampleRate(som.AudioCallbackRate());
+    knob6.SetSampleRate(som.AudioCallbackRate());
+    expression.SetSampleRate(som.AudioCallbackRate());
+    encoder.SetUpdateRate(som.AudioCallbackRate());
+    sw1.SetUpdateRate(som.AudioCallbackRate());
+    sw2.SetUpdateRate(som.AudioCallbackRate());
+    sw3.SetUpdateRate(som.AudioCallbackRate());
+    sw4.SetUpdateRate(som.AudioCallbackRate());
+    sw5.SetUpdateRate(som.AudioCallbackRate());
+    sw6.SetUpdateRate(som.AudioCallbackRate());
+    sw7.SetUpdateRate(som.AudioCallbackRate());
   }
 
   /** Sets the audio block size
