@@ -92,26 +92,8 @@ def bools_to_lower_str(comp):
 
 	return new_comp
 
-def get_output_array(components):
-	output_comps = len(list(filter_match(components, 'direction', 'out')))
-	return 'float output_data[{output_comps}];'
-
 def generate_header(board_description_dict):
 
-  # if board_description_file != '':
-  #   try:
-  #     with open(board_description_file, 'rb') as file:
-  #       target = json.load(file)
-  #   except FileNotFoundError:
-  #     raise FileNotFoundError(f'Could not find board description file "{board_description_file}"')
-  # else:
-  #   try:
-  #     default_description = pkg_resources.resource_string(__name__, os.path.join('resources', f'{board_name}.json'))
-  #     target = json.loads(default_description)
-  #   except FileNotFoundError:
-  #     raise FileNotFoundError(f'Unknown Daisy board "{board_name}"')
-  # with open(board_description_file, 'rb') as file:
-  #   target = json.load(file)
   target = board_description_dict
   
   # flesh out target components:
@@ -175,15 +157,6 @@ def generate_header(board_description_dict):
   replacements['external_codecs'] = target.get('external_codecs', [])
   replacements['som_class'] = 'daisy::DaisySeed' if som == 'seed' else 'daisy::patch_sm::DaisyPatchSM'
 
-  # replacements['linker_script'] = meta['daisy'].get('linker_script', '')
-  # if replacements['linker_script'] != '':
-  #   replacements['linker_script'] = f'../{meta["daisy"]["linker_script"]}'
-
-  # depth = meta['daisy'].get('libdaisy_depth', 3)
-  # replacements['libdaisy_path'] = f'{"../" * depth}libdaisy'
-
-  # replacements['class_name'] = class_name
-
   replacements['display_conditional'] = ('#include "dev/oled_ssd130x.h"' if ('display' in target) else  "")
   replacements['target_name'] = target['name']
   replacements['init'] = filter_map_template(components, 'init', key_exclude='default', match_exclude=True)
@@ -206,14 +179,14 @@ def generate_header(board_description_dict):
   replacements['rgbled'] = filter_map_init(components, 'component', 'RgbLed', key_exclude='default', match_exclude=True)
   replacements['gateout'] = filter_map_init(components, 'component', 'GateOut', key_exclude='default', match_exclude=True)
   replacements['dachandle'] = filter_map_init(components, 'component', 'CVOuts', key_exclude='default', match_exclude=True)
-
-  # replacements['callback_write_out'] = filter_map_set(components, 'direction', 'out')
   
   replacements['display'] = '// no display' if not 'display' in target else \
     'daisy::OledDisplay<' + target['display']['driver'] + '>::Config display_config;\n    ' +\
     'display_config.driver_config.transport_config.Defaults();\n    ' +\
     "".join(map(lambda x: x, target['display'].get('config', {}))) +\
-    'display.Init(display_config);\n'
+    'display.Init(display_config);\n' +\
+    '    display.Fill(0);\n' +\
+    '    display.Update();\n'
 
   replacements['process'] = filter_map_template(components, 'process', key_exclude='default', match_exclude=True)
   # There's also this after {process}. I don't see any meta in the defaults json at this time. Is this needed?
@@ -222,6 +195,9 @@ def generate_header(board_description_dict):
   replacements['postprocess'] = filter_map_template(components, 'postprocess', key_exclude='default', match_exclude=True)
   replacements['displayprocess'] = filter_map_template(components, 'display', key_exclude='default', match_exclude=True)
   replacements['hidupdaterates'] = filter_map_template(components, 'updaterate', key_exclude='default', match_exclude=True)
+
+  license_string = pkg_resources.resource_string(__package__, 'resources/LICENSE').decode('utf-8')
+  replacements['license'] = '/*\n * ' + '\n * '.join([line for line in license_string.split('\n')]) + '\n */'
 
   component_declarations = list(filter(lambda x: not x.get('default', False), components))
   component_declarations = list(filter(lambda x: x.get('typename', '') != '', component_declarations))
@@ -232,14 +208,6 @@ def generate_header(board_description_dict):
     replacements['non_class_declarations'] = "\n  ".join(map(lambda x: x['non_class_decl'].format_map(x), non_class_declarations))
 
   replacements['dispdec'] = ('daisy::OledDisplay<' + target['display']['driver'] + '> display;') if ('display' in target) else  "// no display"
-
-  replacements['output_arrays'] = get_output_array(components)
-
-  replacements['parameters'] = []
-  replacements['output_parameters'] = []
-  replacements['callback_write_out'] = ''
-  replacements['loop_write_out'] = ''
-  replacements['callback_write_in'] = []
   
   env_opts = {"trim_blocks": True, "lstrip_blocks": True}
 
