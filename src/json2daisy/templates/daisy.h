@@ -184,7 +184,7 @@ struct Daisy{{ name|capitalize }} {
     {% elif som == 'patch_sm' %}
     som.SetAudioSampleRate(sample_rate);
     {% endif %}
-    {{samplerate}}
+    {{hidupdaterates}}
   }
 
   /** Sets the audio block size

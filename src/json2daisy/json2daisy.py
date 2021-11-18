@@ -261,7 +261,7 @@ def generate_header(board_description_dict):
     if 'typename' in comp:
       del comp['typename']
 
-  return rendered_header, target['name'], components
+  return rendered_header, target['name'], components, target['aliases']
 
 def generate_header_from_file(description_file):
   with open(description_file, 'rb') as file:
@@ -290,9 +290,9 @@ if __name__ == '__main__':
   
   args = parser.parse_args()
   if args.source[-5:] == '.json':
-    header, name, components = generate_header_from_file(args.source)
+    header, name, components, aliases = generate_header_from_file(args.source)
   else:
-    header, name, components = generate_header_from_name(args.source)
+    header, name, components, aliases = generate_header_from_name(args.source)
     
   outfile = args.o if args.o is not None else f'j2daisy_{name}.h'
   with open(outfile, 'w') as file:
