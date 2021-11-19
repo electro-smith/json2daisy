@@ -1,8 +1,10 @@
-# This will generate simple integration tests for all the included JSON. These should be
-# reviewed manually every time they're generated to ensure the output matches what's expected.
-# Following their generation, any changes to the code that changes the output will be caught here.
-# Therefore, this should _not_ be run via CI or other automated methods; it should only change
-# when you know the output should change.
+"""
+This will generate simple integration tests for all the included JSON. These should be
+reviewed manually every time they're generated to ensure the output matches what's expected.
+Following their generation, any changes to the code that changes the output will be caught here.
+Therefore, this should _not_ be run via CI or other automated methods; it should only change
+when you know the output should change.
+"""
 
 import sys
 import shutil
