@@ -1,6 +1,6 @@
 {
   "name": "petal",
-  "driver": "seed",
+  "som": "seed",
   "parents": {
     "i2c": {
       "component": "i2c",

@@ -1,6 +1,6 @@
 {
 	"name": "pod",
-	"driver": "seed",
+	"som": "seed",
 	"defines": {
 		"OOPSY_TARGET_HAS_MIDI_INPUT": 1
 	},
