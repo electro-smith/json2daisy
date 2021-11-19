@@ -108,6 +108,16 @@ struct DaisyPod {
     sw2.Debounce(); 
   }
 
+  /** Handles all the maintenance processing. This should be run last within the audio callback.
+   * 
+   */
+  void PostProcess()
+  {
+    led3.Update();
+    led1.Update();
+    led2.Update();
+  }
+
   /** Sets the audio sample rate
    *  \param sample_rate the new sample rate in Hz
    */

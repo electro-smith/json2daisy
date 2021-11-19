@@ -33,7 +33,7 @@
 
 namespace json2daisy {
 
-LedDriverPca9685<2, true>::DmaBuffer DMA_BUFFER_MEM_SECTION led_driver_dma_buffer_a, led_driver_dma_buffer_b;
+daisy::LedDriverPca9685<2, true>::DmaBuffer DMA_BUFFER_MEM_SECTION led_driver_dma_buffer_a, led_driver_dma_buffer_b;
 
 struct DaisyPetal {
 
@@ -46,7 +46,7 @@ struct DaisyPetal {
     som.Init(boost);
 
     // i2c
-    i2c.Init({daisy::I2CHandle::Config::Peripheral::I2C_1, {som.GetPin(11), som.GetPin(12)}, daisy::I2CHandle::Config::Speed::I2C_1MHZ}); 
+    i2c.Init({daisy::I2CHandle::Config::Peripheral::I2C_1, {som.GetPin(11), som.GetPin(12)}, daisy::I2CHandle::Config::Speed::I2C_1MHZ, daisy::I2CHandle::Config::Mode::I2C_MASTER}); 
  
     // LED Drivers
     led_driver.Init(i2c, {0x00, 0x02}, led_driver_dma_buffer_a, led_driver_dma_buffer_b); 
@@ -109,6 +109,14 @@ struct DaisyPetal {
     sw5.Debounce();
     sw6.Debounce();
     sw7.Debounce(); 
+  }
+
+  /** Handles all the maintenance processing. This should be run last within the audio callback.
+   * 
+   */
+  void PostProcess()
+  {
+    led_driver.SwapBuffersAndTransmit();
   }
 
   /** Sets the audio sample rate
@@ -175,7 +183,7 @@ struct DaisyPetal {
   daisy::AnalogControl knob6;
   daisy::AnalogControl expression;
   daisy::Encoder encoder;
-  LedDriverPca9685<2, true> led_driver;
+  daisy::LedDriverPca9685<2, true> led_driver;
   daisy::Switch sw1;
   daisy::Switch sw2;
   daisy::Switch sw3;
@@ -183,7 +191,7 @@ struct DaisyPetal {
   daisy::Switch sw5;
   daisy::Switch sw6;
   daisy::Switch sw7;
-  I2CHandle i2c;
+  daisy::I2CHandle i2c;
   // no display
 
 };

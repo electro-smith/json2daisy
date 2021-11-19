@@ -34,7 +34,7 @@
 namespace json2daisy {
 
 uint8_t pad_shift_debounced[8*2];
-  LedDriverPca9685<2, true>::DmaBuffer DMA_BUFFER_MEM_SECTION led_driver_dma_buffer_a, led_driver_dma_buffer_b;
+daisy::LedDriverPca9685<2, true>::DmaBuffer DMA_BUFFER_MEM_SECTION led_driver_dma_buffer_a, led_driver_dma_buffer_b;
 
 struct DaisyField {
 
@@ -47,7 +47,7 @@ struct DaisyField {
     som.Init(boost);
 
     // i2c
-    i2c.Init({daisy::I2CHandle::Config::Peripheral::I2C_1, {som.GetPin(11), som.GetPin(12)}, daisy::I2CHandle::Config::Speed::I2C_1MHZ}); 
+    i2c.Init({daisy::I2CHandle::Config::Peripheral::I2C_1, {som.GetPin(11), som.GetPin(12)}, daisy::I2CHandle::Config::Speed::I2C_1MHZ, daisy::I2CHandle::Config::Mode::I2C_MASTER}); 
  
     // LED Drivers
     led_driver.Init(i2c, {0x00, 0x02}, led_driver_dma_buffer_a, led_driver_dma_buffer_b); 
@@ -140,6 +140,31 @@ struct DaisyField {
     sw2.Debounce(); 
   }
 
+  /** Handles all the maintenance processing. This should be run last within the audio callback.
+   * 
+   */
+  void PostProcess()
+  {
+    pad_shift.Update();
+    pad_shift_debounced[0] = pad_shift.State(0) | (pad_shift_debounced[0] << 1);
+    pad_shift_debounced[1] = pad_shift.State(1) | (pad_shift_debounced[1] << 1);
+    pad_shift_debounced[2] = pad_shift.State(2) | (pad_shift_debounced[2] << 1);
+    pad_shift_debounced[3] = pad_shift.State(3) | (pad_shift_debounced[3] << 1);
+    pad_shift_debounced[4] = pad_shift.State(4) | (pad_shift_debounced[4] << 1);
+    pad_shift_debounced[5] = pad_shift.State(5) | (pad_shift_debounced[5] << 1);
+    pad_shift_debounced[6] = pad_shift.State(6) | (pad_shift_debounced[6] << 1);
+    pad_shift_debounced[7] = pad_shift.State(7) | (pad_shift_debounced[7] << 1);
+    pad_shift_debounced[15] = pad_shift.State(15) | (pad_shift_debounced[15] << 1);
+    pad_shift_debounced[14] = pad_shift.State(14) | (pad_shift_debounced[14] << 1);
+    pad_shift_debounced[13] = pad_shift.State(13) | (pad_shift_debounced[13] << 1);
+    pad_shift_debounced[12] = pad_shift.State(12) | (pad_shift_debounced[12] << 1);
+    pad_shift_debounced[11] = pad_shift.State(11) | (pad_shift_debounced[11] << 1);
+    pad_shift_debounced[10] = pad_shift.State(10) | (pad_shift_debounced[10] << 1);
+    pad_shift_debounced[9] = pad_shift.State(9) | (pad_shift_debounced[9] << 1);
+    pad_shift_debounced[8] = pad_shift.State(8) | (pad_shift_debounced[8] << 1);
+    led_driver.SwapBuffersAndTransmit();
+  }
+
   /** Sets the audio sample rate
    *  \param sample_rate the new sample rate in Hz
    */
@@ -199,7 +224,7 @@ struct DaisyField {
   daisy::AnalogControl cv2;
   daisy::AnalogControl cv3;
   daisy::AnalogControl cv4;
-  ShiftRegister4021<2> pad_shift;
+  daisy::ShiftRegister4021<2> pad_shift;
   daisy::AnalogControl knob1;
   daisy::AnalogControl knob2;
   daisy::AnalogControl knob3;
@@ -212,10 +237,10 @@ struct DaisyField {
   daisy::DacHandle::Config cvout2;
   daisy::GateIn gatein;
   dsy_gpio gateout;
-  LedDriverPca9685<2, true> led_driver;
+  daisy::LedDriverPca9685<2, true> led_driver;
   daisy::Switch sw1;
   daisy::Switch sw2;
-  I2CHandle i2c;
+  daisy::I2CHandle i2c;
   daisy::OledDisplay<daisy::SSD130x4WireSpi128x64Driver> display;
 
 };
