@@ -85,13 +85,6 @@ def flatten_index_dicts(comp):
 
 	return newcomp
 
-def bools_to_lower_str(comp):
-	new_comp = {}
-	for key, val in comp.items():
-		new_comp[key] = str(val).lower() if isinstance(val, bool) else val
-
-	return new_comp
-
 def generate_header(board_description_dict):
 
   target = board_description_dict
@@ -123,14 +116,6 @@ def generate_header(board_description_dict):
   # e.g. "pin": {"a": 12} => "pin_a": 12
   components = [flatten_pin_dicts(comp) for comp in components]
   components = [flatten_index_dicts(comp) for comp in components]
-
-  """
-  This corrupts booleans that might be used for python parsing, and
-  so should be avoided. If the user wants to insert C parameters, they
-  should just be strings
-  """
-  # # convert booleans to properly cased strings
-  # components = [bools_to_lower_str(comp) for comp in components]
 
   target['components'] = components
   if not 'name' in target:
