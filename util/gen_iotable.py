@@ -1,5 +1,5 @@
 """
-This utility will automaticall generate markup tables describing the I/O for all
+This utility will automatically generate markup tables describing the I/O for all
 included board descriptions.
 """
 
