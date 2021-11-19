@@ -205,7 +205,7 @@ def generate_header(board_description_dict):
     replacements['comps'] = ";\n  ".join(map(lambda x: x['typename'].format_map(x) + ' ' + x['name'], component_declarations)) + ';'
   non_class_declarations = list(filter(lambda x: 'non_class_decl' in x, component_declarations))
   if len(non_class_declarations) > 0:
-    replacements['non_class_declarations'] = "\n  ".join(map(lambda x: x['non_class_decl'].format_map(x), non_class_declarations))
+    replacements['non_class_declarations'] = "\n".join(map(lambda x: x['non_class_decl'].format_map(x), non_class_declarations))
 
   replacements['dispdec'] = ('daisy::OledDisplay<' + target['display']['driver'] + '> display;') if ('display' in target) else  "// no display"
   

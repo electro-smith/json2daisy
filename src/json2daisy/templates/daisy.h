@@ -171,6 +171,14 @@ struct Daisy{{ name|capitalize }} {
     {% endif %}
   }
 
+  /** Handles all the maintenance processing. This should be run last within the audio callback.
+   * 
+   */
+  void PostProcess()
+  {
+    {{postprocess}}
+  }
+
   /** Sets the audio sample rate
    *  \param sample_rate the new sample rate in Hz
    */
