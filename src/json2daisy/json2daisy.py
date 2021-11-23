@@ -176,6 +176,7 @@ def generate_header(board_description_dict):
   replacements['process'] = filter_map_template(components, 'process', key_exclude='default', match_exclude=True)
   # There's also this after {process}. I don't see any meta in the defaults json at this time. Is this needed?
   # ${components.filter((e) => e.meta).map((e) => e.meta.map(m=>`${template(m, e)}`).join("")).join("")}
+  replacements['loopprocess'] = filter_map_template(components, 'loopprocess', key_exclude='default', match_exclude=True)
 
   replacements['postprocess'] = filter_map_template(components, 'postprocess', key_exclude='default', match_exclude=True)
   replacements['displayprocess'] = filter_map_template(components, 'display', key_exclude='default', match_exclude=True)

@@ -260,7 +260,7 @@
 		"address": "{0x00}",
 		"parent": "",
 		"pin": "",
-		"postprocess": "{name}.SwapBuffersAndTransmit();",
+		"loopprocess": "{name}.SwapBuffersAndTransmit();",
 		"mapping": []
 	},
 	"PCA9685Led": {
@@ -330,17 +330,17 @@
 		"mapping": [
 			{
 				"name": "{name}",
-				"get": "(json2daisy::{parent}_debounced[{index}] == 1)",
+				"get": "(json2daisy::{parent}_debounced[{index}] == 0xFE)",
 				"bool": true
 			},
 			{
 				"name": "{name}_press",
-				"get": "(json2daisy::{parent}_debounced[{index}] != 0)",
+				"get": "(json2daisy::{parent}_debounced[{index}] != 0xFF)",
 				"bool": false
 			},
 			{
 				"name": "{name}_fall",
-				"get": "(json2daisy::{parent}_debounced[{index}] == 0b10000000)",
+				"get": "(json2daisy::{parent}_debounced[{index}] == 0x7F)",
 				"bool": true
 			}
 		]
