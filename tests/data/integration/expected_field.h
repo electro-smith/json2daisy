@@ -162,6 +162,13 @@ struct DaisyField {
     pad_shift_debounced[10] = pad_shift.State(10) | (pad_shift_debounced[10] << 1);
     pad_shift_debounced[9] = pad_shift.State(9) | (pad_shift_debounced[9] << 1);
     pad_shift_debounced[8] = pad_shift.State(8) | (pad_shift_debounced[8] << 1);
+  }
+
+  /** Handles processing that shouldn't occur in the audio block, such as blocking transfers
+   * 
+   */
+  void LoopProcess()
+  {
     led_driver.SwapBuffersAndTransmit();
   }
 

@@ -116,6 +116,14 @@ struct DaisyPetal {
    */
   void PostProcess()
   {
+    
+  }
+
+  /** Handles processing that shouldn't occur in the audio block, such as blocking transfers
+   * 
+   */
+  void LoopProcess()
+  {
     led_driver.SwapBuffersAndTransmit();
   }
 

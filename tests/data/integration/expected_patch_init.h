@@ -72,6 +72,14 @@ struct DaisyPatch_init {
     
   }
 
+  /** Handles processing that shouldn't occur in the audio block, such as blocking transfers
+   * 
+   */
+  void LoopProcess()
+  {
+    
+  }
+
   /** Sets the audio sample rate
    *  \param sample_rate the new sample rate in Hz
    */
