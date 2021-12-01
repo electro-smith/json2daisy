@@ -60,4 +60,3 @@ for template_name in included_json:
 
 with open(path.join(abs_path, 'integration_test.py'), 'w') as file:
   file.write(test_file)
-    

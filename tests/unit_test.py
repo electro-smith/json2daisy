@@ -68,5 +68,3 @@ class TestFunctions(unittest.TestCase):
     }
     test_output = json2daisy.flatten_index_dicts(input_component)
     self.assertTrue(compare_dicts(test_output, expected_output))
-
-  
