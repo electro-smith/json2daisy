@@ -5,6 +5,9 @@
 		"OOPSY_TARGET_HAS_MIDI_INPUT": 1
 	},
 	"display": {},
+	"audio": {
+    "channels": 4
+  },
 	"external_codecs": [
 		{
 			"periph": "SAI_2",

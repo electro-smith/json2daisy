@@ -2,6 +2,9 @@
 	"name": "patch_init",
 	"som": "patch_sm",
 	"defines": {},
+	"audio": {
+    "channels": 2
+  },
 	"components": {
 		"cv_1": {
 			"component": "AnalogControl",

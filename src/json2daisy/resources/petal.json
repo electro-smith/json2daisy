@@ -16,6 +16,9 @@
       "driver_count": 2
     }
   },
+  "audio": {
+    "channels": 2
+  },
   "components": {
     "sw1": {
       "component": "Switch",
