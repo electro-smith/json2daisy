@@ -215,7 +215,19 @@ def generate_header(board_description_dict):
     if 'typename' in comp:
       del comp['typename']
 
-  return rendered_header, target['name'], components, target['aliases']
+  audio_info = target.get('audio', None)
+  audio_channels = audio_info.get('channels', 2) if audio_info is not None else 2
+
+  # This dictionary contains the necessary information to automatically (or manually) 
+  # write code to interface with the generated board
+  board_info = {
+    'name': target['name'],
+    'components': components,
+    'aliases': target['aliases'],
+    'channels': audio_channels
+  }
+
+  return rendered_header, board_info
 
 def generate_header_from_file(description_file):
   with open(description_file, 'rb') as file:
@@ -244,11 +256,11 @@ if __name__ == '__main__':
   
   args = parser.parse_args()
   if args.source[-5:] == '.json':
-    header, name, components, aliases = generate_header_from_file(args.source)
+    header, info = generate_header_from_file(args.source)
   else:
-    header, name, components, aliases = generate_header_from_name(args.source)
+    header, info = generate_header_from_name(args.source)
     
-  outfile = args.o if args.o is not None else f'j2daisy_{name}.h'
+  outfile = args.o if args.o is not None else f'j2daisy_{info["name"]}.h'
   with open(outfile, 'w') as file:
     file.write(header)
   
