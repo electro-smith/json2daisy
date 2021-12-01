@@ -85,7 +85,18 @@ def flatten_index_dicts(comp):
 
 	return newcomp
 
-def generate_header(board_description_dict):
+def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
+
+  """
+  Generate a C++ Daisy board header from a dictionary board description. 
+
+  Returns a tuple containing the board 
+  header as a string and an information dictionary.
+
+  The dictionary provides sufficient information to
+  generate interface code, including component getters
+  and setters, audio channel count, etc.
+  """
 
   target = board_description_dict
   
@@ -229,13 +240,37 @@ def generate_header(board_description_dict):
 
   return rendered_header, board_info
 
-def generate_header_from_file(description_file):
+def generate_header_from_file(description_file: str) -> 'tuple[str, dict]':
+
+  """
+  Generate a C++ Daisy board header from a JSON description file.
+
+  Returns a tuple containing the board 
+  header as a string and an information dictionary.
+  
+  The dictionary provides sufficient information to
+  generate interface code, including component getters
+  and setters, audio channel count, etc.
+  """
+
   with open(description_file, 'rb') as file:
     daisy_description = json.load(file)
   
   return generate_header(daisy_description)
 
-def generate_header_from_name(board_name):
+def generate_header_from_name(board_name: str) -> 'tuple[str, dict]':
+
+  """
+  Generate a C++ Daisy board header for an existing daisy board.
+
+  Returns a tuple containing the board 
+  header as a string and an information dictionary.
+  
+  The dictionary provides sufficient information to
+  generate interface code, including component getters
+  and setters, audio channel count, etc.
+  """
+
   try:
     description_file = os.path.join('resources', f'{board_name}.json')
     daisy_description = pkg_resources.resource_string(__name__, description_file)
