@@ -279,25 +279,4 @@ def generate_header_from_name(board_name: str) -> 'tuple[str, dict]':
     raise FileNotFoundError(f'Unknown Daisy board "{board_name}"')
   
   return generate_header(daisy_description)
-
-if __name__ == '__main__':
-  import argparse
-
-  parser = argparse.ArgumentParser(description='Convert JSON board descriptions to C++ headers.')
-  parser.add_argument('source', type=str,
-                      help='Daisy board name or path to JSON board description (e.g. "patch" or "path/to/patch.json")')
-  parser.add_argument('-o', type=str, default=None,
-                      help='output file name')
-  
-  args = parser.parse_args()
-  if args.source[-5:] == '.json':
-    header, info = generate_header_from_file(args.source)
-  else:
-    header, info = generate_header_from_name(args.source)
-    
-  outfile = args.o if args.o is not None else f'j2daisy_{info["name"]}.h'
-  with open(outfile, 'w') as file:
-    file.write(header)
-  
-  print(f'Generated Daisy C++ header in "{outfile}"')
   
