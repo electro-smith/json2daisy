@@ -482,23 +482,86 @@
 		"mapping": [
 			{
 				"name": "{name}",
-				"get": "{class_name}.{name}.ReadTemperature()"
+				"get": "{class_name}.{name}.ReadTemperature()",
+				"where": "main"
 			},
 			{
 				"name": "{name}_temp",
-				"get": "{class_name}.{name}.ReadTemperature()"
+				"get": "{class_name}.{name}.ReadTemperature()",
+				"where": "main"
 			},
 			{
 				"name": "{name}_hum",
-				"get": "{class_name}.{name}.ReadHumidity()"
+				"get": "{class_name}.{name}.ReadHumidity()",
+				"where": "main"
 			},
 			{
 				"name": "{name}_press",
-				"get": "{class_name}.{name}.ReadPressure()"
+				"get": "{class_name}.{name}.ReadPressure()",
+				"where": "main"
 			},
 			{
 				"name": "{name}_alt",
-				"get": "{class_name}.{name}.ReadAltitude({pressure})"
+				"get": "{class_name}.{name}.ReadAltitude({pressure})",
+				"where": "main"
+			}
+		]
+	},
+	"HallSensor": {
+		"map_init": "daisy::HallSensor::Config {name}_config;\n  {name}_config.periph = {periph};\n  {name}_config.pin = som.GetPin({pin});\n  {name}.Init({name}_config);",
+		"typename":  "daisy::HallSensor",
+		"direction": "in",
+		"pin": 14,
+		"periph": "daisy::HallSensor::Config::Peripheral::TIM_4",
+		"mapping": [
+			{
+				"name": "{name}",
+				"get": "{class_name}.{name}.GetCount()"
+			}
+		]
+	},
+	"Tlv493d": {
+		"map_init": "daisy::Tlv493dI2CTransport::Config {name}_config;\n  {name}_config.periph = {periph};\n  {name}_config.speed = {speed};\n  {name}_config.scl = som.GetPin({pin_scl});\n  {name}_config.sda = som.GetPin({pin_sda});\n  daisy::Tlv493dI2C::Config {name}_main_conf;\n  {name}_main_conf.transport_config = {name}_config;\n  {name}_main_conf.address = {address};\n  {name}.Init({name}_main_conf);",
+		"direction": "in",
+		"pin": "scl,sda",
+		"address": "TLV493D_ADDRESS1",
+		"periph": "daisy::I2CHandle::Config::Peripheral::I2C_1",
+		"speed": "daisy::I2CHandle::Config::Speed::I2C_400KHZ",
+		"mapping": [
+			{
+				"name": "{name}",
+				"get": "{class_name}.{name}.GetAmount()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_x",
+				"get": "{class_name}.{name}.GetX()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_y",
+				"get": "{class_name}.{name}.GetY()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_z",
+				"get": "{class_name}.{name}.GetZ()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_amount",
+				"get": "{class_name}.{name}.GetAmount()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_azimuth",
+				"get": "{class_name}.{name}.GetAzimuth()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_polar",
+				"get": "{class_name}.{name}.GetPolar()",
+				"where": "main"
 			}
 		]
 	}
