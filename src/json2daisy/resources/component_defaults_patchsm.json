@@ -244,5 +244,79 @@
 				"where": "main"
 			}
 		]
+	},
+	"MotorShield": {
+		"map_init": "daisy::Pca9685::Config {name}_pca_config;\n  {name}_pca_config.address = {address};\n  {name}_pca_config.periph = {periph};\n  {name}_pca_config.speed = {speed};\n  {name}_pca_config.scl = som.GetPin({pin_scl});\n  {name}_pca_config.sda = som.GetPin({pin_sda});\n  daisy::Adafruit_MotorShield::Config {name}_config;\n  {name}_config.pca9685_config = {name}_pca_config;\n  {name}_config.frequency = {frequency};\n  {name}.Init({name}_config);",
+		"typename": "daisy::Adafruit_MotorShield",
+		"direction": "out",
+		"pin": "scl,sda",
+		"address": "daisy::Pca9685::PCA9685_I2C_BASE_ADDRESS",
+		"periph": "daisy::I2CHandle::Config::Peripheral::I2C_1",
+		"speed": "daisy::I2CHandle::Config::Speed::I2C_400KHZ",
+		"frequency": "1600",
+		"mapping": [
+		]
+	},
+	"StepperMotor": {
+		"map_init": "{name} = {parent}.GetStepper({steps}, {index});\n  {name}->SetSpeed({speed});",
+		"typename": "daisy::Adafruit_MotorShield::Adafruit_StepperMotor*",
+		"direction": "out",
+		"parent": "",
+		"steps": 48,
+		"index": 1,
+		"speed": 60,
+		"loopprocess": "{name}->Process();",
+		"mapping": [
+			{
+				"name": "{name}",
+				"set": "{class_name}.{name}->StepNonblocking({value}, daisy::Adafruit_MotorShield::FORWARD);",
+				"bool": true
+			},
+			{
+				"name": "{name}_forward",
+				"set": "{class_name}.{name}->StepNonblocking({value}, daisy::Adafruit_MotorShield::FORWARD);",
+				"bool": true
+			},
+			{
+				"name": "{name}_backward",
+				"set": "{class_name}.{name}->StepNonblocking({value}, daisy::Adafruit_MotorShield::BACKWARD);",
+				"bool": true
+			},
+			{
+				"name": "{name}_release",
+				"set": "{class_name}.{name}->Release();",
+				"bool": true
+			}
+		]
+	},
+	"DcMotor": {
+		"map_init": "{name} = {parent}.GetMotor({index});\n  {name}->SetSpeedFine({speed} * 4095);",
+		"typename": "daisy::Adafruit_MotorShield::Adafruit_DCMotor*",
+		"direction": "out",
+		"parent": "",
+		"index": 1,
+		"speed": 0.25,
+		"mapping": [
+			{
+				"name": "{name}",
+				"set": "{class_name}.{name}->Run(daisy::Adafruit_MotorShield::FORWARD);",
+				"bool": true
+			},
+			{
+				"name": "{name}_forward",
+				"set": "{class_name}.{name}->Run(daisy::Adafruit_MotorShield::FORWARD);",
+				"bool": true
+			},
+			{
+				"name": "{name}_backward",
+				"set": "{class_name}.{name}->Run(daisy::Adafruit_MotorShield::BACKWARD);",
+				"bool": true
+			},
+			{
+				"name": "{name}_stop",
+				"set": "{class_name}.{name}->FullOff();",
+				"bool": true
+			}
+		]
 	}
 }

@@ -175,6 +175,12 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
   replacements['rgbled'] = filter_map_init(components, 'component', 'RgbLed', key_exclude='default', match_exclude=True)
   replacements['gateout'] = filter_map_init(components, 'component', 'GateOut', key_exclude='default', match_exclude=True)
   replacements['dachandle'] = filter_map_init(components, 'component', 'CVOuts', key_exclude='default', match_exclude=True)
+
+  # sensors
+  replacements['motor'] = filter_map_init(components, 'component', 'MotorShield', key_exclude='default', match_exclude=True)
+  replacements['stepper'] = filter_map_init(components, 'component', 'StepperMotor', key_exclude='default', match_exclude=True)
+  replacements['dc'] = filter_map_init(components, 'component', 'DcMotor', key_exclude='default', match_exclude=True)
+  replacements['bme280'] = filter_map_init(components, 'component', 'Bme280', key_exclude='default', match_exclude=True)
   
   replacements['display'] = '// no display' if not 'display' in target else \
     'daisy::OledDisplay<' + target['display']['driver'] + '>::Config display_config;\n    ' +\

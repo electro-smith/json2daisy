@@ -97,6 +97,22 @@ struct Daisy{{ name|capitalize }} {
     // Display
     {{ display }} 
     {% endif %}
+    {% if motor != '' %}
+    // Adafruit Motor Shield
+    {{ motor }}
+    {% endif %}
+    {% if stepper != '' %}
+    // Stepper motor pointer from the Adafruit Motor Shield
+    {{ stepper }}
+    {% endif %}
+    {% if dc != '' %}
+    // DC motor pointer from the Adafruit Motor Shield
+    {{ dc }}
+    {% endif %}
+    {% if bme280 != '' %}
+    // BME280 pressure/temperature/humidity sensor
+    {{ bme280 }}
+    {% endif %}
 
     {% if som == 'seed' and external_codecs|length > 0 %}
     // External Codec Initialization
