@@ -157,30 +157,36 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
   replacements['target_name'] = target['name']
   replacements['init'] = filter_map_template(components, 'init', key_exclude='default', match_exclude=True)
 
-  replacements['cd4021'] = filter_map_init(components, 'component', 'CD4021', key_exclude='default', match_exclude=True)
-  replacements['i2c'] = filter_map_init(components, 'component', 'i2c', key_exclude='default', match_exclude=True)
-  replacements['pca9685'] = filter_map_init(components, 'component', 'PCA9685', key_exclude='default', match_exclude=True)
-  replacements['switch'] = filter_map_init(components, 'component', 'Switch', key_exclude='default', match_exclude=True)
-  replacements['gatein'] = filter_map_init(components, 'component', 'GateIn', key_exclude='default', match_exclude=True)
-  replacements['encoder'] = filter_map_init(components, 'component', 'Encoder', key_exclude='default', match_exclude=True)
-  replacements['switch3'] = filter_map_init(components, 'component', 'Switch3', key_exclude='default', match_exclude=True)
+  # replacements['cd4021'] = filter_map_init(components, 'component', 'CD4021', key_exclude='default', match_exclude=True)
+  # replacements['i2c'] = filter_map_init(components, 'component', 'i2c', key_exclude='default', match_exclude=True)
+  # replacements['pca9685'] = filter_map_init(components, 'component', 'PCA9685', key_exclude='default', match_exclude=True)
+  # replacements['switch'] = filter_map_init(components, 'component', 'Switch', key_exclude='default', match_exclude=True)
+  # replacements['gatein'] = filter_map_init(components, 'component', 'GateIn', key_exclude='default', match_exclude=True)
+  # replacements['encoder'] = filter_map_init(components, 'component', 'Encoder', key_exclude='default', match_exclude=True)
+  # replacements['switch3'] = filter_map_init(components, 'component', 'Switch3', key_exclude='default', match_exclude=True)
   replacements['analogcount'] = len(list(filter_matches(components, 'component', ['AnalogControl', 'AnalogControlBipolar', 'CD4051'], key_exclude='default', match_exclude=True)))
 
   replacements['init_single'] = filter_map_ctrl(components, 'component', ['AnalogControl', 'AnalogControlBipolar', 'CD4051'], 'init_single', key_exclude='default', match_exclude=True)
   replacements['ctrl_init'] = filter_map_ctrl(components, 'component', ['AnalogControl', 'AnalogControlBipolar'], 'map_init', key_exclude='default', match_exclude=True)	
 
-  replacements['ctrl_mux_init'] = filter_map_init(components, 'component', 'CD4051AnalogControl', key_exclude='default', match_exclude=True)
+  # replacements['ctrl_mux_init'] = filter_map_init(components, 'component', 'CD4051AnalogControl', key_exclude='default', match_exclude=True)
 
-  replacements['led'] = filter_map_init(components, 'component', 'Led', key_exclude='default', match_exclude=True)
-  replacements['rgbled'] = filter_map_init(components, 'component', 'RgbLed', key_exclude='default', match_exclude=True)
-  replacements['gateout'] = filter_map_init(components, 'component', 'GateOut', key_exclude='default', match_exclude=True)
-  replacements['dachandle'] = filter_map_init(components, 'component', 'CVOuts', key_exclude='default', match_exclude=True)
+  # replacements['led'] = filter_map_init(components, 'component', 'Led', key_exclude='default', match_exclude=True)
+  # replacements['rgbled'] = filter_map_init(components, 'component', 'RgbLed', key_exclude='default', match_exclude=True)
+  # replacements['gateout'] = filter_map_init(components, 'component', 'GateOut', key_exclude='default', match_exclude=True)
+  # replacements['dachandle'] = filter_map_init(components, 'component', 'CVOuts', key_exclude='default', match_exclude=True)
 
   # sensors
-  replacements['motor'] = filter_map_init(components, 'component', 'MotorShield', key_exclude='default', match_exclude=True)
-  replacements['stepper'] = filter_map_init(components, 'component', 'StepperMotor', key_exclude='default', match_exclude=True)
-  replacements['dc'] = filter_map_init(components, 'component', 'DcMotor', key_exclude='default', match_exclude=True)
-  replacements['bme280'] = filter_map_init(components, 'component', 'Bme280', key_exclude='default', match_exclude=True)
+  # replacements['motor'] = filter_map_init(components, 'component', 'MotorShield', key_exclude='default', match_exclude=True)
+  # replacements['stepper'] = filter_map_init(components, 'component', 'StepperMotor', key_exclude='default', match_exclude=True)
+  # replacements['dc'] = filter_map_init(components, 'component', 'DcMotor', key_exclude='default', match_exclude=True)
+  # replacements['bme280'] = filter_map_init(components, 'component', 'Bme280', key_exclude='default', match_exclude=True)
+  # replacements['hall'] = filter_map_init(components, 'component', 'HallSensor', key_exclude='default', match_exclude=True)
+  # replacements['hall'] = filter_map_init(components, 'component', 'HallSensor', key_exclude='default', match_exclude=True)
+
+  for name in components:
+    if name not in ('AnalogControl', 'AnalogControlBipolar', 'CD4051'):
+      replacements[name] = filter_map_init(components, 'component', name, key_exclude='default', match_exclude=True)
   
   replacements['display'] = '// no display' if not 'display' in target else \
     'daisy::OledDisplay<' + target['display']['driver'] + '>::Config display_config;\n    ' +\

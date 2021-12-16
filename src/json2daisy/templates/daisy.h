@@ -38,29 +38,29 @@ struct Daisy{{ name|capitalize }} {
     // i2c
     {{ i2c }} 
     {% endif %}
-    {% if pca9685 != '' %} 
+    {% if PCA9685 != '' %} 
     // LED Drivers
-    {{ pca9685 }} 
+    {{ PCA9685 }} 
     {% endif %}
-    {% if switch != '' %} 
+    {% if Switch != '' %} 
     // Switches
-    {{ switch }} 
+    {{ Switch }} 
     {% endif %}
-    {% if switch3 != '' %}
+    {% if Switch3 != '' %}
     // SPDT Switches
-    {{ switch3 }} 
+    {{ Switch3 }} 
     {% endif %}
-    {% if cd4021 != '' %} 
+    {% if CD4021 != '' %} 
     // Muxes
-    {{ cd4021 }} 
+    {{ CD4021 }} 
     {% endif %}
-    {% if gatein != '' %} 
+    {% if GateIn != '' %} 
     // Gate ins
-    {{ gatein }} 
+    {{ GateIn }} 
     {% endif %}
-    {% if encoder != '' %} 
+    {% if Encoder != '' %} 
     // Rotary encoders
-    {{ encoder }} 
+    {{ Encoder }} 
     {% endif %}
     {% if init_single != '' %} 
     // Single channel ADC initialization
@@ -77,17 +77,17 @@ struct Daisy{{ name|capitalize }} {
     // Multiplexed AnlogControl objects
     {{ ctrl_mux_init }} 
     {% endif %}
-    {% if led != '' %} 
+    {% if Led != '' %} 
     // LEDs
-    {{ led }} 
+    {{ Led }} 
     {% endif %}
-    {% if rgbled != '' %}
+    {% if RgbLed != '' %}
     // RBG LEDs 
-    {{ rgbled }} 
+    {{ RgbLed }} 
     {% endif %}
-    {% if gateout != '' %} 
+    {% if GateOut != '' %} 
     // Gate outs
-    {{ gateout }} 
+    {{ GateOut }} 
     {% endif %}
     {% if dachandle != '' %}
     // DAC 
@@ -97,21 +97,41 @@ struct Daisy{{ name|capitalize }} {
     // Display
     {{ display }} 
     {% endif %}
-    {% if motor != '' %}
+    {% if MotorShield != '' %}
     // Adafruit Motor Shield
-    {{ motor }}
+    {{ MotorShield }}
     {% endif %}
-    {% if stepper != '' %}
+    {% if StepperMotor != '' %}
     // Stepper motor pointer from the Adafruit Motor Shield
-    {{ stepper }}
+    {{ StepperMotor }}
     {% endif %}
-    {% if dc != '' %}
+    {% if DcMotor != '' %}
     // DC motor pointer from the Adafruit Motor Shield
-    {{ dc }}
+    {{ DcMotor }}
     {% endif %}
-    {% if bme280 != '' %}
+    {% if Bme280 != '' %}
     // BME280 pressure/temperature/humidity sensor
-    {{ bme280 }}
+    {{ Bme280 }}
+    {% endif %}
+    {% if HallSensor != '' %}
+    // Hall sensor
+    {{ HallSensor }}
+    {% endif %}
+    {% if Tlv493d != '' %}
+    // Accelerometer
+    {{ Tlv493d }}
+    {% endif %}
+    {% if Mpr121 != '' %}
+    // Capacitive sensor
+    {{ Mpr121 }}
+    {% endif %}
+    {% if Apds9960 != '' %}
+    // Gesture / color sensor
+    {{ Apds9960 }}
+    {% endif %}
+    {% if Bmp390 != '' %}
+    // Bmp390 pressure / temperature sensor
+    {{ Bmp390 }}
     {% endif %}
 
     {% if som == 'seed' and external_codecs|length > 0 %}
