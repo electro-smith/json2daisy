@@ -3,20 +3,20 @@ import json
 import os
 import pkg_resources
 
-json_defaults_file = ''
+json_defs_file = ''
 
-# helper for loading and processing the defaults, component list, etc
+# helper for loading and processing the definitions, component list, etc
 def map_load(pair):
 	# load the default components
-	comp_string = pkg_resources.resource_string(__name__, json_defaults_file)
-	component_defaults = json.loads(comp_string)
+	comp_string = pkg_resources.resource_string(__name__, json_defs_file)
+	component_defs = json.loads(comp_string)
 
 	pair[1]['name'] = pair[0]
 
 	# the default if it exists
-	component = component_defaults[pair[1]['component']]
+	component = component_defs[pair[1]['component']]
 	if(component):
-		# copy component defaults into the def
+		# copy component defs into the def
 		# TODO this should be recursive for object structures..
 		for k in component:
 			if not k in pair[1]: 
@@ -108,14 +108,14 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
     parents[key]['is_parent'] = True
   components.update(parents)
 
-  seed_defaults = os.path.join("resources", 'component_defaults.json')
-  patchsm_defaults = os.path.join("resources", 'component_defaults_patchsm.json')
-  defaults = {'seed': seed_defaults, 'patch_sm': patchsm_defaults}
+  seed_defs = os.path.join("resources", 'component_defs.json')
+  patchsm_defs = os.path.join("resources", 'component_defs_patchsm.json')
+  definitions = {'seed': seed_defs, 'patch_sm': patchsm_defs}
   som = target.get('som', 'seed')
 
-  global json_defaults_file
+  global json_defs_file
   try:
-    json_defaults_file = defaults[som]
+    json_defs_file = definitions[som]
   except KeyError:
     raise NameError(f'Unkown som "{som}"')
 
@@ -157,48 +157,32 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
   replacements['target_name'] = target['name']
   replacements['init'] = filter_map_template(components, 'init', key_exclude='default', match_exclude=True)
 
-  # replacements['cd4021'] = filter_map_init(components, 'component', 'CD4021', key_exclude='default', match_exclude=True)
-  # replacements['i2c'] = filter_map_init(components, 'component', 'i2c', key_exclude='default', match_exclude=True)
-  # replacements['pca9685'] = filter_map_init(components, 'component', 'PCA9685', key_exclude='default', match_exclude=True)
-  # replacements['switch'] = filter_map_init(components, 'component', 'Switch', key_exclude='default', match_exclude=True)
-  # replacements['gatein'] = filter_map_init(components, 'component', 'GateIn', key_exclude='default', match_exclude=True)
-  # replacements['encoder'] = filter_map_init(components, 'component', 'Encoder', key_exclude='default', match_exclude=True)
-  # replacements['switch3'] = filter_map_init(components, 'component', 'Switch3', key_exclude='default', match_exclude=True)
   replacements['analogcount'] = len(list(filter_matches(components, 'component', ['AnalogControl', 'AnalogControlBipolar', 'CD4051'], key_exclude='default', match_exclude=True)))
 
   replacements['init_single'] = filter_map_ctrl(components, 'component', ['AnalogControl', 'AnalogControlBipolar', 'CD4051'], 'init_single', key_exclude='default', match_exclude=True)
   replacements['ctrl_init'] = filter_map_ctrl(components, 'component', ['AnalogControl', 'AnalogControlBipolar'], 'map_init', key_exclude='default', match_exclude=True)	
 
-  # replacements['ctrl_mux_init'] = filter_map_init(components, 'component', 'CD4051AnalogControl', key_exclude='default', match_exclude=True)
+  comp_string = pkg_resources.resource_string(__name__, json_defs_file)
+  definitions_dict = json.loads(comp_string)
 
-  # replacements['led'] = filter_map_init(components, 'component', 'Led', key_exclude='default', match_exclude=True)
-  # replacements['rgbled'] = filter_map_init(components, 'component', 'RgbLed', key_exclude='default', match_exclude=True)
-  # replacements['gateout'] = filter_map_init(components, 'component', 'GateOut', key_exclude='default', match_exclude=True)
-  # replacements['dachandle'] = filter_map_init(components, 'component', 'CVOuts', key_exclude='default', match_exclude=True)
-
-  # sensors
-  # replacements['motor'] = filter_map_init(components, 'component', 'MotorShield', key_exclude='default', match_exclude=True)
-  # replacements['stepper'] = filter_map_init(components, 'component', 'StepperMotor', key_exclude='default', match_exclude=True)
-  # replacements['dc'] = filter_map_init(components, 'component', 'DcMotor', key_exclude='default', match_exclude=True)
-  # replacements['bme280'] = filter_map_init(components, 'component', 'Bme280', key_exclude='default', match_exclude=True)
-  # replacements['hall'] = filter_map_init(components, 'component', 'HallSensor', key_exclude='default', match_exclude=True)
-  # replacements['hall'] = filter_map_init(components, 'component', 'HallSensor', key_exclude='default', match_exclude=True)
-
-  for name in components:
+  for name in definitions_dict:
     if name not in ('AnalogControl', 'AnalogControlBipolar', 'CD4051'):
       replacements[name] = filter_map_init(components, 'component', name, key_exclude='default', match_exclude=True)
   
-  replacements['display'] = '// no display' if not 'display' in target else \
-    'daisy::OledDisplay<' + target['display']['driver'] + '>::Config display_config;\n    ' +\
-    'display_config.driver_config.transport_config.Defaults();\n    ' +\
-    "".join(map(lambda x: x, target['display'].get('config', {}))) +\
-    'display.Init(display_config);\n' +\
-    '    display.Fill(0);\n' +\
-    '    display.Update();\n'
+  if 'display' in target:
+    replacements['dispdec'] = f'daisy::OledDisplay<{target["display"]["driver"]}> display;'
+    replacements['display'] = f"""
+    daisy::OledDisplay<{target['display']['driver']}>::Config display_config;
+    display_config.driver_config.transport_config.Defaults();
+    {"".join(map(lambda x: x, target['display'].get('config', {})))}
+    display.Init(display_config);
+      display.Fill(0);
+      display.Update();
+    """
+  else:
+    replacements['display'] = ''
 
   replacements['process'] = filter_map_template(components, 'process', key_exclude='default', match_exclude=True)
-  # There's also this after {process}. I don't see any meta in the defaults json at this time. Is this needed?
-  # ${components.filter((e) => e.meta).map((e) => e.meta.map(m=>`${template(m, e)}`).join("")).join("")}
   replacements['loopprocess'] = filter_map_template(components, 'loopprocess', key_exclude='default', match_exclude=True)
 
   replacements['postprocess'] = filter_map_template(components, 'postprocess', key_exclude='default', match_exclude=True)
@@ -215,8 +199,6 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
   non_class_declarations = list(filter(lambda x: 'non_class_decl' in x, component_declarations))
   if len(non_class_declarations) > 0:
     replacements['non_class_declarations'] = "\n".join(map(lambda x: x['non_class_decl'].format_map(x), non_class_declarations))
-
-  replacements['dispdec'] = ('daisy::OledDisplay<' + target['display']['driver'] + '> display;') if ('display' in target) else  "// no display"
   
   env_opts = {"trim_blocks": True, "lstrip_blocks": True}
 

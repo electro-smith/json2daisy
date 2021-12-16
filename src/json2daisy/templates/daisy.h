@@ -30,111 +30,137 @@ struct Daisy{{ name|capitalize }} {
     {% else %}
     som.Init();
     {% endif %}
-
     {% if init != '' %} 
+
     {{init}} 
     {% endif %}
     {% if i2c != '' %}
+
     // i2c
     {{ i2c }} 
     {% endif %}
     {% if PCA9685 != '' %} 
+
     // LED Drivers
     {{ PCA9685 }} 
     {% endif %}
     {% if Switch != '' %} 
+
     // Switches
     {{ Switch }} 
     {% endif %}
     {% if Switch3 != '' %}
+
     // SPDT Switches
     {{ Switch3 }} 
     {% endif %}
     {% if CD4021 != '' %} 
+
     // Muxes
     {{ CD4021 }} 
     {% endif %}
     {% if GateIn != '' %} 
+
     // Gate ins
     {{ GateIn }} 
     {% endif %}
     {% if Encoder != '' %} 
+
     // Rotary encoders
     {{ Encoder }} 
     {% endif %}
     {% if init_single != '' %} 
+
     // Single channel ADC initialization
     {{ init_single }} 
     {% endif %}
     {% if som == 'seed' %}
+    {% if analogcount > 0 %}
     som.adc.Init(cfg, ANALOG_COUNT);
     {% endif %}
+    {% endif %}
     {% if ctrl_init != '' %} 
+
     // AnalogControl objects
     {{ ctrl_init }} 
     {% endif %}
-    {% if ctrl_mux_init != '' %} 
+    {% if CD4051AnalogControl != '' %} 
+
     // Multiplexed AnlogControl objects
-    {{ ctrl_mux_init }} 
+    {{ CD4051AnalogControl }} 
     {% endif %}
     {% if Led != '' %} 
+
     // LEDs
     {{ Led }} 
     {% endif %}
     {% if RgbLed != '' %}
+
     // RBG LEDs 
     {{ RgbLed }} 
     {% endif %}
     {% if GateOut != '' %} 
+
     // Gate outs
     {{ GateOut }} 
     {% endif %}
-    {% if dachandle != '' %}
+    {% if CVOuts != '' %}
+
     // DAC 
-    {{ dachandle }} 
+    {{ CVOuts }} 
     {% endif %}
     {% if display != '' %}
+
     // Display
     {{ display }} 
     {% endif %}
     {% if MotorShield != '' %}
+
     // Adafruit Motor Shield
     {{ MotorShield }}
     {% endif %}
     {% if StepperMotor != '' %}
+
     // Stepper motor pointer from the Adafruit Motor Shield
     {{ StepperMotor }}
     {% endif %}
     {% if DcMotor != '' %}
+
     // DC motor pointer from the Adafruit Motor Shield
     {{ DcMotor }}
     {% endif %}
     {% if Bme280 != '' %}
+
     // BME280 pressure/temperature/humidity sensor
     {{ Bme280 }}
     {% endif %}
     {% if HallSensor != '' %}
+
     // Hall sensor
     {{ HallSensor }}
     {% endif %}
     {% if Tlv493d != '' %}
+
     // Accelerometer
     {{ Tlv493d }}
     {% endif %}
     {% if Mpr121 != '' %}
+
     // Capacitive sensor
     {{ Mpr121 }}
     {% endif %}
     {% if Apds9960 != '' %}
+
     // Gesture / color sensor
     {{ Apds9960 }}
     {% endif %}
     {% if Bmp390 != '' %}
+
     // Bmp390 pressure / temperature sensor
     {{ Bmp390 }}
     {% endif %}
-
     {% if som == 'seed' and external_codecs|length > 0 %}
+
     // External Codec Initialization
     daisy::SaiHandle::Config sai_config[{{ 1 + external_codecs|length }}];
 
@@ -263,8 +289,7 @@ struct Daisy{{ name|capitalize }} {
     som.StartAudio(cb);
   }
 
-  /** This is the board's "System On Module"
-   */
+  /** This is the board's "System On Module" */
   {{som_class}} som;
   {% if som == 'seed' %}
   daisy::AdcChannelConfig cfg[ANALOG_COUNT];
