@@ -318,5 +318,304 @@
 				"bool": true
 			}
 		]
+	},
+	"Bme280": {
+		"map_init": "daisy::Bme280I2CTransport::Config {name}_config;\n  {name}_config.periph = {periph};\n  {name}_config.speed = {speed};\n  {name}_config.scl = som.GetPin({pin_scl});\n  {name}_config.sda = som.GetPin({pin_sda});\n  {name}_config.address = {address};\n  daisy::Bme280I2C::Config {name}_config_main;\n  {name}_config_main.transport_config = {name}_config; {name}.Init({name}_config_main);",
+		"typename": "daisy::Bme280I2C",
+		"direction": "in",
+		"pin": "scl,sda",
+		"address": "daisy::Pca9685::PCA9685_I2C_BASE_ADDRESS",
+		"periph": "daisy::I2CHandle::Config::Peripheral::I2C_1",
+		"speed": "daisy::I2CHandle::Config::Speed::I2C_400KHZ",
+		"pressure": 1013,
+		"mapping": [
+			{
+				"name": "{name}",
+				"get": "{class_name}.{name}.ReadTemperature()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_temp",
+				"get": "{class_name}.{name}.ReadTemperature()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_hum",
+				"get": "{class_name}.{name}.ReadHumidity()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_press",
+				"get": "{class_name}.{name}.ReadPressure()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_alt",
+				"get": "{class_name}.{name}.ReadAltitude({pressure})",
+				"where": "main"
+			}
+		]
+	},
+	"HallSensor": {
+		"map_init": "daisy::HallSensor::Config {name}_config;\n  {name}_config.periph = {periph};\n  {name}_config.pin = som.GetPin({pin});\n  {name}.Init({name}_config);",
+		"typename":  "daisy::HallSensor",
+		"direction": "in",
+		"pin": 14,
+		"periph": "daisy::HallSensor::Config::Peripheral::TIM_4",
+		"mapping": [
+			{
+				"name": "{name}",
+				"get": "{class_name}.{name}.GetCount()"
+			}
+		]
+	},
+	"Tlv493d": {
+		"map_init": "daisy::Tlv493dI2CTransport::Config {name}_config;\n  {name}_config.periph = {periph};\n  {name}_config.speed = {speed};\n  {name}_config.scl = som.GetPin({pin_scl});\n  {name}_config.sda = som.GetPin({pin_sda});\n  daisy::Tlv493dI2C::Config {name}_main_conf;\n  {name}_main_conf.transport_config = {name}_config;\n  {name}_main_conf.address = {address};\n  {name}.Init({name}_main_conf);",
+		"direction": "in",
+		"pin": "scl,sda",
+		"address": "TLV493D_ADDRESS1",
+		"periph": "daisy::I2CHandle::Config::Peripheral::I2C_1",
+		"speed": "daisy::I2CHandle::Config::Speed::I2C_400KHZ",
+		"mapping": [
+			{
+				"name": "{name}",
+				"get": "{class_name}.{name}.GetAmount()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_x",
+				"get": "{class_name}.{name}.GetX()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_y",
+				"get": "{class_name}.{name}.GetY()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_z",
+				"get": "{class_name}.{name}.GetZ()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_amount",
+				"get": "{class_name}.{name}.GetAmount()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_azimuth",
+				"get": "{class_name}.{name}.GetAzimuth()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_polar",
+				"get": "{class_name}.{name}.GetPolar()",
+				"where": "main"
+			}
+		]
+	},
+	"Mpr121": {
+		"map_init": "daisy::Mpr121I2CTransport::Config {name}_config;\n  {name}_config.periph = {periph};\n  {name}_config.speed = {speed};\n  {name}_config.scl = som.GetPin({pin_scl});\n  {name}_config.sda = som.GetPin({pin_sda});\n  {name}_config.dev_addr = {address};\n  daisy::Mpr121I2C::Config {name}_main_conf;\n  {name}_main_conf.transport_config = {name}_config;\n  {name}_main_conf.touch_threshold = {touch_threshold};\n  {name}_main_conf.release_threshold = {release_threshold};\n  {name}.Init({name}_main_conf);",
+		"direction": "in",
+		"pin": "scl,sda",
+		"address": "MPR121_I2CADDR_DEFAULT",
+		"periph": "daisy::I2CHandle::Config::Peripheral::I2C_1",
+		"speed": "daisy::I2CHandle::Config::Speed::I2C_400KHZ",
+		"touch_threshold": "MPR121_TOUCH_THRESHOLD_DEFAULT",
+		"release_threshold": "MPR121_RELEASE_THRESHOLD_DEFAULT",
+		"mapping": [
+			{
+				"name": "{name}",
+				"get": "(({class_name}.{name}.Touched() & 0x001) ? 1.0f : 0.f)",
+				"where": "main"
+			},
+			{
+				"name": "{name}_ch0",
+				"get": "(({class_name}.{name}.Touched() & 0x001) ? 1.0f : 0.f)",
+				"where": "main"
+			},
+			{
+				"name": "{name}_ch1",
+				"get": "(({class_name}.{name}.Touched() & 0x002) ? 1.0f : 0.f)",
+				"where": "main"
+			},
+			{
+				"name": "{name}_ch2",
+				"get": "(({class_name}.{name}.Touched() & 0x004) ? 1.0f : 0.f)",
+				"where": "main"
+			},
+			{
+				"name": "{name}_ch3",
+				"get": "(({class_name}.{name}.Touched() & 0x008) ? 1.0f : 0.f)",
+				"where": "main"
+			},
+			{
+				"name": "{name}_ch4",
+				"get": "(({class_name}.{name}.Touched() & 0x010) ? 1.0f : 0.f)",
+				"where": "main"
+			},
+			{
+				"name": "{name}_ch5",
+				"get": "(({class_name}.{name}.Touched() & 0x020) ? 1.0f : 0.f)",
+				"where": "main"
+			},
+			{
+				"name": "{name}_ch6",
+				"get": "(({class_name}.{name}.Touched() & 0x040) ? 1.0f : 0.f)",
+				"where": "main"
+			},
+			{
+				"name": "{name}_ch7",
+				"get": "(({class_name}.{name}.Touched() & 0x080) ? 1.0f : 0.f)",
+				"where": "main"
+			},
+			{
+				"name": "{name}_ch8",
+				"get": "(({class_name}.{name}.Touched() & 0x100) ? 1.0f : 0.f)",
+				"where": "main"
+			},
+			{
+				"name": "{name}_ch9",
+				"get": "(({class_name}.{name}.Touched() & 0x200) ? 1.0f : 0.f)",
+				"where": "main"
+			},
+			{
+				"name": "{name}_ch10",
+				"get": "(({class_name}.{name}.Touched() & 0x400) ? 1.0f : 0.f)",
+				"where": "main"
+			},
+			{
+				"name": "{name}_ch11",
+				"get": "(({class_name}.{name}.Touched() & 0x800) ? 1.0f : 0.f)",
+				"where": "main"
+			},
+			{
+				"name": "{name}_ch0_raw",
+				"get": "{class_name}.{name}.FilteredData(0)",
+				"where": "main",
+				"range": [0, 1023]
+			},
+			{
+				"name": "{name}_ch1_raw",
+				"get": "{class_name}.{name}.FilteredData(1)",
+				"where": "main",
+				"range": [0, 1023]
+			},
+			{
+				"name": "{name}_ch2_raw",
+				"get": "{class_name}.{name}.FilteredData(2)",
+				"where": "main",
+				"range": [0, 1023]
+			},
+			{
+				"name": "{name}_ch3_raw",
+				"get": "{class_name}.{name}.FilteredData(3)",
+				"where": "main",
+				"range": [0, 1023]
+			},
+			{
+				"name": "{name}_ch4_raw",
+				"get": "{class_name}.{name}.FilteredData(4)",
+				"where": "main",
+				"range": [0, 1023]
+			},
+			{
+				"name": "{name}_ch5_raw",
+				"get": "{class_name}.{name}.FilteredData(5)",
+				"where": "main",
+				"range": [0, 1023]
+			},
+			{
+				"name": "{name}_ch6_raw",
+				"get": "{class_name}.{name}.FilteredData(6)",
+				"where": "main",
+				"range": [0, 1023]
+			},
+			{
+				"name": "{name}_ch7_raw",
+				"get": "{class_name}.{name}.FilteredData(7)",
+				"where": "main",
+				"range": [0, 1023]
+			},
+			{
+				"name": "{name}_ch8_raw",
+				"get": "{class_name}.{name}.FilteredData(8)",
+				"where": "main",
+				"range": [0, 1023]
+			},
+			{
+				"name": "{name}_ch9_raw",
+				"get": "{class_name}.{name}.FilteredData(9)",
+				"where": "main",
+				"range": [0, 1023]
+			},
+			{
+				"name": "{name}_ch10_raw",
+				"get": "{class_name}.{name}.FilteredData(10)",
+				"where": "main",
+				"range": [0, 1023]
+			},
+			{
+				"name": "{name}_ch11_raw",
+				"get": "{class_name}.{name}.FilteredData(11)",
+				"where": "main",
+				"range": [0, 1023]
+			}
+		]
+	},
+	"Apds9960": {
+		"map_init": "daisy::Apds9960I2CTransport::Config {name}_config;\n  {name}_config.periph = {periph};\n  {name}_config.speed = {speed};\n  {name}_config.scl = som.GetPin({pin_scl});\n  {name}_config.sda = som.GetPin({pin_sda});\n  daisy::Apds9960I2C::Config {name}_main_conf;\n  {name}_main_conf.transport_config = {name}_config;\n  {name}.Init({name}_main_conf);",
+		"direction": "in",
+		"pin": "scl,sda",
+		"periph": "daisy::I2CHandle::Config::Peripheral::I2C_1",
+		"speed": "daisy::I2CHandle::Config::Speed::I2C_400KHZ",
+		"mapping": [
+			{
+				"name": "{name}",
+				"get": "{name}.ReadGesture()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_gest",
+				"get": "{name}.ReadGesture()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_prox",
+				"get": "{name}.ReadProximity()",
+				"where": "main"
+			}
+		]
+	},
+	"Bmp390": {
+		"map_init": "daisy::Bmp390I2CTransport::Config {name}_config;\n  {name}_config.periph = {periph};\n  {name}_config.speed = {speed};\n  {name}_config.scl = som.GetPin({pin_scl});\n  {name}_config.sda = som.GetPin({pin_sda});\n  daisy::Bmp390I2C::Config {name}_config_main;\n  {name}_config_main.transport_config = {name}_config; {name}.Init({name}_config_main);",
+		"typename": "daisy::Bmp390I2C",
+		"direction": "in",
+		"pin": "scl,sda",
+		"periph": "daisy::I2CHandle::Config::Peripheral::I2C_1",
+		"speed": "daisy::I2CHandle::Config::Speed::I2C_400KHZ",
+		"pressure": 1013,
+		"mapping": [
+			{
+				"name": "{name}",
+				"get": "{class_name}.{name}.ReadTemperature()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_temp",
+				"get": "{class_name}.{name}.ReadTemperature()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_press",
+				"get": "{class_name}.{name}.ReadPressure()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_alt",
+				"get": "{class_name}.{name}.ReadAltitude({pressure})",
+				"where": "main"
+			}
+		]
 	}
 }
