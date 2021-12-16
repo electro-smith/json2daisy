@@ -397,7 +397,7 @@
 		]
 	},
 	"MotorShield": {
-		"map_init": "daisy::Pca9685::Config {name}_pca_config;\n  {name}_pca_config.address = {address};\n  {name}_pca_config.periph = {periph};\n  {name}_pca_config.speed = {speed};\n  {name}_pca_config.scl = som.GetPin({pin_scl});\n  {name}_pca_config.sda = som.GetPin({pin_sda});\n  daisy::Adafruit_MotorShield::Config {name}_config;\n  {name}_config.pca9685_config = {name}_pca_config;\n  {name}_config.frequency = {frequency};\n  {name}.Init({name}_config);",
+		"map_init": "daisy::Pca9685::Config {name}_pca_config;\n    {name}_pca_config.address = {address};\n    {name}_pca_config.periph = {periph};\n    {name}_pca_config.speed = {speed};\n    {name}_pca_config.scl = som.GetPin({pin_scl});\n    {name}_pca_config.sda = som.GetPin({pin_sda});\n    daisy::Adafruit_MotorShield::Config {name}_config;\n    {name}_config.pca9685_config = {name}_pca_config;\n    {name}_config.frequency = {frequency};\n    {name}.Init({name}_config);",
 		"typename": "daisy::Adafruit_MotorShield",
 		"direction": "out",
 		"pin": "scl,sda",
@@ -409,7 +409,7 @@
 		]
 	},
 	"StepperMotor": {
-		"map_init": "{name} = {parent}.GetStepper({steps}, {index});\n  {name}->SetSpeed({speed});",
+		"map_init": "{name} = {parent}.GetStepper({steps}, {index});\n    {name}->SetSpeed({speed});",
 		"typename": "daisy::Adafruit_MotorShield::Adafruit_StepperMotor*",
 		"direction": "out",
 		"parent": "",
@@ -441,7 +441,7 @@
 		]
 	},
 	"DcMotor": {
-		"map_init": "{name} = {parent}.GetMotor({index});\n  {name}->SetSpeedFine({speed} * 4095);",
+		"map_init": "{name} = {parent}.GetMotor({index});\n    {name}->SetSpeedFine({speed} * 4095);",
 		"typename": "daisy::Adafruit_MotorShield::Adafruit_DCMotor*",
 		"direction": "out",
 		"parent": "",
@@ -471,7 +471,7 @@
 		]
 	},
 	"Bme280": {
-		"map_init": "daisy::Bme280I2CTransport::Config {name}_config;\n  {name}_config.periph = {periph};\n  {name}_config.speed = {speed};\n  {name}_config.scl = som.GetPin({pin_scl});\n  {name}_config.sda = som.GetPin({pin_sda});\n  {name}_config.address = {address};\n  daisy::Bme280I2C::Config {name}_config_main;\n  {name}_config_main.transport_config = {name}_config; {name}.Init({name}_config_main);",
+		"map_init": "daisy::Bme280I2CTransport::Config {name}_config;\n    {name}_config.periph = {periph};\n    {name}_config.speed = {speed};\n    {name}_config.scl = som.GetPin({pin_scl});\n    {name}_config.sda = som.GetPin({pin_sda});\n    {name}_config.address = {address};\n    daisy::Bme280I2C::Config {name}_config_main;\n    {name}_config_main.transport_config = {name}_config;\n    {name}.Init({name}_config_main);",
 		"typename": "daisy::Bme280I2C",
 		"direction": "in",
 		"pin": "scl,sda",
@@ -508,7 +508,7 @@
 		]
 	},
 	"HallSensor": {
-		"map_init": "daisy::HallSensor::Config {name}_config;\n  {name}_config.periph = {periph};\n  {name}_config.pin = som.GetPin({pin});\n  {name}.Init({name}_config);",
+		"map_init": "daisy::HallSensor::Config {name}_config;\n    {name}_config.periph = {periph};\n    {name}_config.pin = som.GetPin({pin});\n    {name}.Init({name}_config);",
 		"typename":  "daisy::HallSensor",
 		"direction": "in",
 		"pin": 14,
@@ -521,7 +521,7 @@
 		]
 	},
 	"Tlv493d": {
-		"map_init": "daisy::Tlv493dI2CTransport::Config {name}_config;\n  {name}_config.periph = {periph};\n  {name}_config.speed = {speed};\n  {name}_config.scl = som.GetPin({pin_scl});\n  {name}_config.sda = som.GetPin({pin_sda});\n  daisy::Tlv493dI2C::Config {name}_main_conf;\n  {name}_main_conf.transport_config = {name}_config;\n  {name}_main_conf.address = {address};\n  {name}.Init({name}_main_conf);",
+		"map_init": "daisy::Tlv493dI2CTransport::Config {name}_config;\n    {name}_config.periph = {periph};\n    {name}_config.speed = {speed};\n    {name}_config.scl = som.GetPin({pin_scl});\n    {name}_config.sda = som.GetPin({pin_sda});\n    daisy::Tlv493dI2C::Config {name}_main_conf;\n    {name}_main_conf.transport_config = {name}_config;\n    {name}_main_conf.address = {address};\n    {name}.Init({name}_main_conf);",
 		"direction": "in",
 		"pin": "scl,sda",
 		"address": "TLV493D_ADDRESS1",
@@ -566,7 +566,7 @@
 		]
 	},
 	"Mpr121": {
-		"map_init": "daisy::Mpr121I2CTransport::Config {name}_config;\n  {name}_config.periph = {periph};\n  {name}_config.speed = {speed};\n  {name}_config.scl = som.GetPin({pin_scl});\n  {name}_config.sda = som.GetPin({pin_sda});\n  {name}_config.dev_addr = {address};\n  daisy::Mpr121I2C::Config {name}_main_conf;\n  {name}_main_conf.transport_config = {name}_config;\n  {name}_main_conf.touch_threshold = {touch_threshold};\n  {name}_main_conf.release_threshold = {release_threshold};\n  {name}.Init({name}_main_conf);",
+		"map_init": "daisy::Mpr121I2CTransport::Config {name}_config;\n    {name}_config.periph = {periph};\n    {name}_config.speed = {speed};\n    {name}_config.scl = som.GetPin({pin_scl});\n    {name}_config.sda = som.GetPin({pin_sda});\n    {name}_config.dev_addr = {address};\n    daisy::Mpr121I2C::Config {name}_main_conf;\n    {name}_main_conf.transport_config = {name}_config;\n    {name}_main_conf.touch_threshold = {touch_threshold};\n    {name}_main_conf.release_threshold = {release_threshold};\n    {name}.Init({name}_main_conf);",
 		"direction": "in",
 		"pin": "scl,sda",
 		"address": "MPR121_I2CADDR_DEFAULT",
@@ -715,7 +715,7 @@
 		]
 	},
 	"Apds9960": {
-		"map_init": "daisy::Apds9960I2CTransport::Config {name}_config;\n  {name}_config.periph = {periph};\n  {name}_config.speed = {speed};\n  {name}_config.scl = som.GetPin({pin_scl});\n  {name}_config.sda = som.GetPin({pin_sda});\n  daisy::Apds9960I2C::Config {name}_main_conf;\n  {name}_main_conf.transport_config = {name}_config;\n  {name}.Init({name}_main_conf);",
+		"map_init": "daisy::Apds9960I2CTransport::Config {name}_config;\n    {name}_config.periph = {periph};\n    {name}_config.speed = {speed};\n    {name}_config.scl = som.GetPin({pin_scl});\n    {name}_config.sda = som.GetPin({pin_sda});\n    daisy::Apds9960I2C::Config {name}_main_conf;\n    {name}_main_conf.transport_config = {name}_config;\n    {name}.Init({name}_main_conf);",
 		"direction": "in",
 		"pin": "scl,sda",
 		"periph": "daisy::I2CHandle::Config::Peripheral::I2C_1",
@@ -739,7 +739,7 @@
 		]
 	},
 	"Bmp390": {
-		"map_init": "daisy::Bmp390I2CTransport::Config {name}_config;\n  {name}_config.periph = {periph};\n  {name}_config.speed = {speed};\n  {name}_config.scl = som.GetPin({pin_scl});\n  {name}_config.sda = som.GetPin({pin_sda});\n  daisy::Bmp390I2C::Config {name}_config_main;\n  {name}_config_main.transport_config = {name}_config; {name}.Init({name}_config_main);",
+		"map_init": "daisy::Bmp390I2CTransport::Config {name}_config;\n    {name}_config.periph = {periph};\n    {name}_config.speed = {speed};\n    {name}_config.scl = som.GetPin({pin_scl});\n    {name}_config.sda = som.GetPin({pin_sda});\n    daisy::Bmp390I2C::Config {name}_config_main;\n    {name}_config_main.transport_config = {name}_config;\n   {name}.Init({name}_config_main);",
 		"typename": "daisy::Bmp390I2C",
 		"direction": "in",
 		"pin": "scl,sda",
