@@ -713,5 +713,60 @@
 				"range": [0, 1023]
 			}
 		]
+	},
+	"Apds9960": {
+		"map_init": "daisy::Apds9960I2CTransport::Config {name}_config;\n  {name}_config.periph = {periph};\n  {name}_config.speed = {speed};\n  {name}_config.scl = som.GetPin({pin_scl});\n  {name}_config.sda = som.GetPin({pin_sda});\n  daisy::Apds9960I2C::Config {name}_main_conf;\n  {name}_main_conf.transport_config = {name}_config;\n  {name}.Init({name}_main_conf);",
+		"direction": "in",
+		"pin": "scl,sda",
+		"periph": "daisy::I2CHandle::Config::Peripheral::I2C_1",
+		"speed": "daisy::I2CHandle::Config::Speed::I2C_400KHZ",
+		"mapping": [
+			{
+				"name": "{name}",
+				"get": "{name}.ReadGesture()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_gest",
+				"get": "{name}.ReadGesture()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_prox",
+				"get": "{name}.ReadProximity()",
+				"where": "main"
+			}
+		]
+	},
+	"Bmp390": {
+		"map_init": "daisy::Bmp390I2CTransport::Config {name}_config;\n  {name}_config.periph = {periph};\n  {name}_config.speed = {speed};\n  {name}_config.scl = som.GetPin({pin_scl});\n  {name}_config.sda = som.GetPin({pin_sda});\n  daisy::Bmp390I2C::Config {name}_config_main;\n  {name}_config_main.transport_config = {name}_config; {name}.Init({name}_config_main);",
+		"typename": "daisy::Bmp390I2C",
+		"direction": "in",
+		"pin": "scl,sda",
+		"periph": "daisy::I2CHandle::Config::Peripheral::I2C_1",
+		"speed": "daisy::I2CHandle::Config::Speed::I2C_400KHZ",
+		"pressure": 1013,
+		"mapping": [
+			{
+				"name": "{name}",
+				"get": "{class_name}.{name}.ReadTemperature()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_temp",
+				"get": "{class_name}.{name}.ReadTemperature()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_press",
+				"get": "{class_name}.{name}.ReadPressure()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_alt",
+				"get": "{class_name}.{name}.ReadAltitude({pressure})",
+				"where": "main"
+			}
+		]
 	}
 }
