@@ -14,7 +14,7 @@ def map_load(pair):
 	pair[1]['name'] = pair[0]
 
 	# the default if it exists
-	component = component_defs[pair[1]['component']]
+	component = component_defs.get(pair[1]['component'], None)
 	if(component):
 		# copy component defs into the def
 		# TODO this should be recursive for object structures..
@@ -22,7 +22,7 @@ def map_load(pair):
 			if not k in pair[1]: 
 				pair[1][k] = component[k]
 	else:
-		raise Exception("undefined component kind: ", pair[1]['component'])
+		raise Exception(f'unknown component "{pair[1]["component"]}"')
 
 	return pair[1]
 
