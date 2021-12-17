@@ -216,7 +216,9 @@ struct Daisy{{ name|capitalize }} {
     {% endif %}
 
     {% if som == 'seed' %}
+    {% if analogcount > 0 %}
     som.adc.Start();
+    {% endif %}
     {% endif %}
   }
 
