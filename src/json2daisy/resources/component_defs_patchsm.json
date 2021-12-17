@@ -1,4 +1,15 @@
 {
+	"UserLed": {
+		"map_init": "",
+		"typename": "",
+		"direction": "out",
+		"mapping": [
+			{
+				"name": "{name}",
+				"set": "{class_name}.som.SetLed({value});"
+			}
+		]
+	},
 	"Switch": {
 		"map_init": "{name}.Init(daisy::patch_sm::DaisyPatchSM::{pin}, som.AudioCallbackRate(), {type}, {polarity}, {pull});",
 		"typename": "daisy::Switch",

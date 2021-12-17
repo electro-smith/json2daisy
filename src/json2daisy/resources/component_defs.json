@@ -1,4 +1,15 @@
 {
+	"UserLed": {
+		"map_init": "",
+		"typename": "",
+		"direction": "out",
+		"mapping": [
+			{
+				"name": "{name}",
+				"set": "{class_name}.som.SetLed({value});"
+			}
+		]
+	},
 	"Switch": {
 		"map_init": "{name}.Init(som.GetPin({pin}), som.AudioCallbackRate(), {type}, {polarity}, {pull});",
 		"typename": "daisy::Switch",
@@ -522,6 +533,7 @@
 	},
 	"Tlv493d": {
 		"map_init": "daisy::Tlv493dI2CTransport::Config {name}_config;\n    {name}_config.periph = {periph};\n    {name}_config.speed = {speed};\n    {name}_config.scl = som.GetPin({pin_scl});\n    {name}_config.sda = som.GetPin({pin_sda});\n    daisy::Tlv493dI2C::Config {name}_main_conf;\n    {name}_main_conf.transport_config = {name}_config;\n    {name}_main_conf.address = {address};\n    {name}.Init({name}_main_conf);",
+		"typename": "daisy::Tlv493dI2C",
 		"direction": "in",
 		"pin": "scl,sda",
 		"address": "TLV493D_ADDRESS1",
@@ -567,6 +579,7 @@
 	},
 	"Mpr121": {
 		"map_init": "daisy::Mpr121I2CTransport::Config {name}_config;\n    {name}_config.periph = {periph};\n    {name}_config.speed = {speed};\n    {name}_config.scl = som.GetPin({pin_scl});\n    {name}_config.sda = som.GetPin({pin_sda});\n    {name}_config.dev_addr = {address};\n    daisy::Mpr121I2C::Config {name}_main_conf;\n    {name}_main_conf.transport_config = {name}_config;\n    {name}_main_conf.touch_threshold = {touch_threshold};\n    {name}_main_conf.release_threshold = {release_threshold};\n    {name}.Init({name}_main_conf);",
+		"typename": "daisy::Mpr121I2C",
 		"direction": "in",
 		"pin": "scl,sda",
 		"address": "MPR121_I2CADDR_DEFAULT",
@@ -716,6 +729,7 @@
 	},
 	"Apds9960": {
 		"map_init": "daisy::Apds9960I2CTransport::Config {name}_config;\n    {name}_config.periph = {periph};\n    {name}_config.speed = {speed};\n    {name}_config.scl = som.GetPin({pin_scl});\n    {name}_config.sda = som.GetPin({pin_sda});\n    daisy::Apds9960I2C::Config {name}_main_conf;\n    {name}_main_conf.transport_config = {name}_config;\n    {name}.Init({name}_main_conf);",
+		"typename": "daisy::Apds9960I2C",
 		"direction": "in",
 		"pin": "scl,sda",
 		"periph": "daisy::I2CHandle::Config::Peripheral::I2C_1",
