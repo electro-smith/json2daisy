@@ -101,7 +101,7 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
   target = board_description_dict
   
   # flesh out target components:
-  components = target['components']
+  components = target.get('components', {})
   parents = target.get('parents', {})
 
   for key in parents:
