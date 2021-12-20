@@ -431,23 +431,15 @@
 		"mapping": [
 			{
 				"name": "{name}",
-				"set": "{class_name}.{name}->StepNonblocking({value}, daisy::Adafruit_MotorShield::FORWARD);",
-				"bool": true
-			},
-			{
-				"name": "{name}_forward",
-				"set": "{class_name}.{name}->StepNonblocking({value}, daisy::Adafruit_MotorShield::FORWARD);",
-				"bool": true
-			},
-			{
-				"name": "{name}_backward",
-				"set": "{class_name}.{name}->StepNonblocking({value}, daisy::Adafruit_MotorShield::BACKWARD);",
-				"bool": true
+				"set": "if ({value} > 0)\n    {class_name}.{name}->StepNonblocking({value}, daisy::Adafruit_MotorShield::FORWARD);\n  else if ({value} < 0)\n    {class_name}.{name}->StepNonblocking(-{value}, daisy::Adafruit_MotorShield::BACKWARD);",
+				"bool": true,
+				"where": "hook"
 			},
 			{
 				"name": "{name}_release",
 				"set": "{class_name}.{name}->Release();",
-				"bool": true
+				"bool": true,
+				"where": "hook"
 			}
 		]
 	},
@@ -461,23 +453,8 @@
 		"mapping": [
 			{
 				"name": "{name}",
-				"set": "{class_name}.{name}->Run(daisy::Adafruit_MotorShield::FORWARD);",
-				"bool": true
-			},
-			{
-				"name": "{name}_forward",
-				"set": "{class_name}.{name}->Run(daisy::Adafruit_MotorShield::FORWARD);",
-				"bool": true
-			},
-			{
-				"name": "{name}_backward",
-				"set": "{class_name}.{name}->Run(daisy::Adafruit_MotorShield::BACKWARD);",
-				"bool": true
-			},
-			{
-				"name": "{name}_stop",
-				"set": "{class_name}.{name}->FullOff();",
-				"bool": true
+				"set": "if ({value} > 0)\n      {class_name}.{name}->Run(daisy::Adafruit_MotorShield::FORWARD);\n    else if ({value} < 0)\n      {class_name}.{name}->Run(daisy::Adafruit_MotorShield::BACKWARD);\n    else\n      {class_name}.{name}->FullOff();",
+				"where": "main"
 			}
 		]
 	},
@@ -737,17 +714,37 @@
 		"mapping": [
 			{
 				"name": "{name}",
-				"get": "{name}.ReadGesture()",
+				"get": "{class_name}.{name}.ReadGesture()",
 				"where": "main"
 			},
 			{
 				"name": "{name}_gest",
-				"get": "{name}.ReadGesture()",
+				"get": "{class_name}.{name}.ReadGesture()",
 				"where": "main"
 			},
 			{
 				"name": "{name}_prox",
-				"get": "{name}.ReadProximity()",
+				"get": "{class_name}.{name}.ReadProximity()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_red",
+				"get": "{class_name}.{name}.GetColorDataRed()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_green",
+				"get": "{class_name}.{name}.GetColorDataGreen()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_blue",
+				"get": "{class_name}.{name}.GetColorDataBlue()",
+				"where": "main"
+			},
+			{
+				"name": "{name}_clear",
+				"get": "{class_name}.{name}.GetColorDataClear()",
 				"where": "main"
 			}
 		]
