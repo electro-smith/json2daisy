@@ -45,17 +45,19 @@ struct DaisyPatch {
   {
     som.Configure();
     som.Init(boost);
-
  
+
     // Gate ins
     dsy_gpio_pin gatein1_pin = som.GetPin(20);
     gatein1.Init(&gatein1_pin);
     dsy_gpio_pin gatein2_pin = som.GetPin(19);
     gatein2.Init(&gatein2_pin); 
  
+
     // Rotary encoders
     encoder.Init(som.GetPin(12), som.GetPin(11), som.GetPin(0), som.AudioCallbackRate()); 
  
+
     // Single channel ADC initialization
     cfg[0].InitSingle(som.GetPin(15));
     cfg[1].InitSingle(som.GetPin(16));
@@ -63,17 +65,20 @@ struct DaisyPatch {
     cfg[3].InitSingle(som.GetPin(18)); 
     som.adc.Init(cfg, ANALOG_COUNT);
  
+
     // AnalogControl objects
     knob1.Init(som.adc.GetPtr(0), som.AudioCallbackRate(), false, false);
     knob2.Init(som.adc.GetPtr(1), som.AudioCallbackRate(), false, false);
     knob3.Init(som.adc.GetPtr(2), som.AudioCallbackRate(), false, false);
     knob4.Init(som.adc.GetPtr(3), som.AudioCallbackRate(), false, false); 
  
+
     // Gate outs
     gateout.pin  = som.GetPin(17);
     gateout.mode = DSY_GPIO_MODE_OUTPUT_PP;
     gateout.pull = DSY_GPIO_NOPULL;
     dsy_gpio_init(&gateout); 
+
     // DAC 
     cvout1.bitdepth = daisy::DacHandle::BitDepth::BITS_12;
     cvout1.buff_state = daisy::DacHandle::BufferState::ENABLED;
@@ -87,13 +92,16 @@ struct DaisyPatch {
     cvout2.chn = daisy::DacHandle::Channel::BOTH;
     som.dac.Init(cvout2);
     som.dac.WriteValue(daisy::DacHandle::Channel::BOTH, 0); 
+
     // Display
+    
     daisy::OledDisplay<daisy::SSD130x4WireSpi128x64Driver>::Config display_config;
     display_config.driver_config.transport_config.Defaults();
+    
     display.Init(display_config);
-    display.Fill(0);
-    display.Update();
- 
+      display.Fill(0);
+      display.Update();
+     
 
     // External Codec Initialization
     daisy::SaiHandle::Config sai_config[2];
@@ -214,8 +222,7 @@ struct DaisyPatch {
     som.StartAudio(cb);
   }
 
-  /** This is the board's "System On Module"
-   */
+  /** This is the board's "System On Module" */
   daisy::DaisySeed som;
   daisy::AdcChannelConfig cfg[ANALOG_COUNT];
 

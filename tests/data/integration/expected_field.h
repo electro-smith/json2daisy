@@ -50,20 +50,25 @@ struct DaisyField {
     // i2c
     i2c.Init({daisy::I2CHandle::Config::Peripheral::I2C_1, {som.GetPin(11), som.GetPin(12)}, daisy::I2CHandle::Config::Speed::I2C_1MHZ, daisy::I2CHandle::Config::Mode::I2C_MASTER}); 
  
+
     // LED Drivers
     led_driver.Init(i2c, {0x00, 0x02}, led_driver_dma_buffer_a, led_driver_dma_buffer_b); 
  
+
     // Switches
     sw1.Init(som.GetPin(30), som.AudioCallbackRate(), daisy::Switch::TYPE_MOMENTARY, daisy::Switch::POLARITY_INVERTED, daisy::Switch::PULL_UP);
     sw2.Init(som.GetPin(29), som.AudioCallbackRate(), daisy::Switch::TYPE_MOMENTARY, daisy::Switch::POLARITY_INVERTED, daisy::Switch::PULL_UP); 
  
+
     // Muxes
     pad_shift.Init({ som.GetPin(28), som.GetPin(27), { som.GetPin(26) } }); 
  
+
     // Gate ins
     dsy_gpio_pin gatein_pin = som.GetPin(0);
     gatein.Init(&gatein_pin); 
  
+
     // Single channel ADC initialization
     cfg[0].InitSingle(som.GetPin(17));
     cfg[1].InitSingle(som.GetPin(18));
@@ -73,12 +78,14 @@ struct DaisyField {
     cfg[pot_mux_index].InitMux(som.GetPin(16), 8, som.GetPin(21), som.GetPin(20), som.GetPin(19)); 
     som.adc.Init(cfg, ANALOG_COUNT);
  
+
     // AnalogControl objects
     cv1.InitBipolarCv(som.adc.GetPtr(0), som.AudioCallbackRate());
     cv2.InitBipolarCv(som.adc.GetPtr(1), som.AudioCallbackRate());
     cv3.InitBipolarCv(som.adc.GetPtr(2), som.AudioCallbackRate());
     cv4.InitBipolarCv(som.adc.GetPtr(3), som.AudioCallbackRate()); 
  
+
     // Multiplexed AnlogControl objects
     knob1.Init(som.adc.GetMuxPtr(pot_mux_index, 0), som.AudioCallbackRate(), false, false);
     knob2.Init(som.adc.GetMuxPtr(pot_mux_index, 3), som.AudioCallbackRate(), false, false);
@@ -89,11 +96,13 @@ struct DaisyField {
     knob7.Init(som.adc.GetMuxPtr(pot_mux_index, 6), som.AudioCallbackRate(), false, false);
     knob8.Init(som.adc.GetMuxPtr(pot_mux_index, 7), som.AudioCallbackRate(), false, false); 
  
+
     // Gate outs
     gateout.pin  = som.GetPin(15);
     gateout.mode = DSY_GPIO_MODE_OUTPUT_PP;
     gateout.pull = DSY_GPIO_NOPULL;
     dsy_gpio_init(&gateout); 
+
     // DAC 
     cvout1.bitdepth = daisy::DacHandle::BitDepth::BITS_12;
     cvout1.buff_state = daisy::DacHandle::BufferState::ENABLED;
@@ -107,14 +116,16 @@ struct DaisyField {
     cvout2.chn = daisy::DacHandle::Channel::BOTH;
     som.dac.Init(cvout2);
     som.dac.WriteValue(daisy::DacHandle::Channel::BOTH, 0); 
+
     // Display
+    
     daisy::OledDisplay<daisy::SSD130x4WireSpi128x64Driver>::Config display_config;
     display_config.driver_config.transport_config.Defaults();
+    
     display.Init(display_config);
-    display.Fill(0);
-    display.Update();
- 
-
+      display.Fill(0);
+      display.Update();
+     
 
     som.adc.Start();
   }
@@ -222,8 +233,7 @@ struct DaisyField {
     som.StartAudio(cb);
   }
 
-  /** This is the board's "System On Module"
-   */
+  /** This is the board's "System On Module" */
   daisy::DaisySeed som;
   daisy::AdcChannelConfig cfg[ANALOG_COUNT];
 

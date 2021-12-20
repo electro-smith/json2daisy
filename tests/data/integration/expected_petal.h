@@ -49,9 +49,11 @@ struct DaisyPetal {
     // i2c
     i2c.Init({daisy::I2CHandle::Config::Peripheral::I2C_1, {som.GetPin(11), som.GetPin(12)}, daisy::I2CHandle::Config::Speed::I2C_1MHZ, daisy::I2CHandle::Config::Mode::I2C_MASTER}); 
  
+
     // LED Drivers
     led_driver.Init(i2c, {0x00, 0x02}, led_driver_dma_buffer_a, led_driver_dma_buffer_b); 
  
+
     // Switches
     sw1.Init(som.GetPin(8), som.AudioCallbackRate(), daisy::Switch::TYPE_MOMENTARY, daisy::Switch::POLARITY_INVERTED, daisy::Switch::PULL_UP);
     sw2.Init(som.GetPin(9), som.AudioCallbackRate(), daisy::Switch::TYPE_MOMENTARY, daisy::Switch::POLARITY_INVERTED, daisy::Switch::PULL_UP);
@@ -61,9 +63,11 @@ struct DaisyPetal {
     sw6.Init(som.GetPin(26), som.AudioCallbackRate(), daisy::Switch::TYPE_MOMENTARY, daisy::Switch::POLARITY_INVERTED, daisy::Switch::PULL_UP);
     sw7.Init(som.GetPin(7), som.AudioCallbackRate(), daisy::Switch::TYPE_MOMENTARY, daisy::Switch::POLARITY_INVERTED, daisy::Switch::PULL_UP); 
  
+
     // Rotary encoders
     encoder.Init(som.GetPin(28), som.GetPin(27), som.GetPin(14), som.AudioCallbackRate()); 
  
+
     // Single channel ADC initialization
     cfg[0].InitSingle(som.GetPin(16));
     cfg[1].InitSingle(som.GetPin(19));
@@ -74,6 +78,7 @@ struct DaisyPetal {
     cfg[6].InitSingle(som.GetPin(15)); 
     som.adc.Init(cfg, ANALOG_COUNT);
  
+
     // AnalogControl objects
     knob1.Init(som.adc.GetPtr(0), som.AudioCallbackRate(), false, false);
     knob2.Init(som.adc.GetPtr(1), som.AudioCallbackRate(), false, false);
@@ -82,9 +87,6 @@ struct DaisyPetal {
     knob5.Init(som.adc.GetPtr(4), som.AudioCallbackRate(), false, false);
     knob6.Init(som.adc.GetPtr(5), som.AudioCallbackRate(), false, false);
     expression.Init(som.adc.GetPtr(6), som.AudioCallbackRate(), false, false); 
-    // Display
-    // no display 
-
 
     som.adc.Start();
   }
@@ -178,8 +180,7 @@ struct DaisyPetal {
     som.StartAudio(cb);
   }
 
-  /** This is the board's "System On Module"
-   */
+  /** This is the board's "System On Module" */
   daisy::DaisySeed som;
   daisy::AdcChannelConfig cfg[ANALOG_COUNT];
 
@@ -201,7 +202,7 @@ struct DaisyPetal {
   daisy::Switch sw6;
   daisy::Switch sw7;
   daisy::I2CHandle i2c;
-  // no display
+  
 
 };
 

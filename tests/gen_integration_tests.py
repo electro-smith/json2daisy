@@ -23,7 +23,7 @@ if path.isdir(integration_path):
   shutil.rmtree(integration_path)
 mkdir(integration_path)
 
-non_templates = ['component_defaults', 'component_defaults_patchsm', 'LICENSE']
+non_templates = ['component_defs', 'component_defs_patchsm', 'LICENSE']
 json_path = path.abspath(path.join(abs_path, '../src/json2daisy/resources'))
 included_json = [item.replace('.json', '') for item in listdir(json_path)]
 

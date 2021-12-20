@@ -44,13 +44,25 @@ struct DaisyPatch_init {
   {
     som.Init();
 
+    // i2c
+     
  
+
+    // LED Drivers
+     
+ 
+
     // Switches
     sw1.Init(daisy::patch_sm::DaisyPatchSM::B7, som.AudioCallbackRate(), daisy::Switch::TYPE_MOMENTARY, daisy::Switch::POLARITY_INVERTED, daisy::Switch::PULL_UP);
     sw2.Init(daisy::patch_sm::DaisyPatchSM::B8, som.AudioCallbackRate(), daisy::Switch::TYPE_MOMENTARY, daisy::Switch::POLARITY_INVERTED, daisy::Switch::PULL_UP); 
-    // Display
-    // no display 
+ 
 
+    // Muxes
+     
+ 
+
+    // Multiplexed AnlogControl objects
+     
 
   }
 
@@ -107,14 +119,13 @@ struct DaisyPatch_init {
     som.StartAudio(cb);
   }
 
-  /** This is the board's "System On Module"
-   */
+  /** This is the board's "System On Module" */
   daisy::patch_sm::DaisyPatchSM som;
 
   // I/O Components
   daisy::Switch sw1;
   daisy::Switch sw2;
-  // no display
+  
 
 };
 

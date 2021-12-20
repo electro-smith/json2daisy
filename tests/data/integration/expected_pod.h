@@ -45,38 +45,46 @@ struct DaisyPod {
   {
     som.Configure();
     som.Init(boost);
-
  
+
     // Switches
     sw1.Init(som.GetPin(27), som.AudioCallbackRate(), daisy::Switch::TYPE_MOMENTARY, daisy::Switch::POLARITY_INVERTED, daisy::Switch::PULL_UP);
     sw2.Init(som.GetPin(28), som.AudioCallbackRate(), daisy::Switch::TYPE_MOMENTARY, daisy::Switch::POLARITY_INVERTED, daisy::Switch::PULL_UP); 
+
     // SPDT Switches
     sw3.Init(som.GetPin(1), som.GetPin(2)); 
  
+
     // Gate ins
     dsy_gpio_pin gatein_pin = som.GetPin(12);
     gatein.Init(&gatein_pin); 
  
+
     // Rotary encoders
     encoder.Init(som.GetPin(26), som.GetPin(25), som.GetPin(13), som.AudioCallbackRate()); 
  
+
     // Single channel ADC initialization
     cfg[0].InitSingle(som.GetPin(21));
     cfg[1].InitSingle(som.GetPin(15)); 
     som.adc.Init(cfg, ANALOG_COUNT);
  
+
     // AnalogControl objects
     knob1.Init(som.adc.GetPtr(0), som.AudioCallbackRate(), false, false);
     knob2.Init(som.adc.GetPtr(1), som.AudioCallbackRate(), false, false); 
  
+
     // LEDs
     led3.Init(som.GetPin(10), true);
     led3.Set(0.0f); 
+
     // RBG LEDs 
     led1.Init(som.GetPin(20), som.GetPin(19), som.GetPin(18), true);
     led1.Set(0.0f, 0.0f, 0.0f);
     led2.Init(som.GetPin(17), som.GetPin(24), som.GetPin(23), true);
     led2.Set(0.0f, 0.0f, 0.0f); 
+
     // DAC 
     cvout1.bitdepth = daisy::DacHandle::BitDepth::BITS_12;
     cvout1.buff_state = daisy::DacHandle::BufferState::ENABLED;
@@ -84,14 +92,16 @@ struct DaisyPod {
     cvout1.chn = daisy::DacHandle::Channel::BOTH;
     som.dac.Init(cvout1);
     som.dac.WriteValue(daisy::DacHandle::Channel::BOTH, 0); 
+
     // Display
+    
     daisy::OledDisplay<daisy::SSD130x4WireSpi128x64Driver>::Config display_config;
     display_config.driver_config.transport_config.Defaults();
+    
     display.Init(display_config);
-    display.Fill(0);
-    display.Update();
- 
-
+      display.Fill(0);
+      display.Update();
+     
 
     som.adc.Start();
   }
@@ -167,8 +177,7 @@ struct DaisyPod {
     som.StartAudio(cb);
   }
 
-  /** This is the board's "System On Module"
-   */
+  /** This is the board's "System On Module" */
   daisy::DaisySeed som;
   daisy::AdcChannelConfig cfg[ANALOG_COUNT];
 
