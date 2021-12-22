@@ -159,6 +159,21 @@ struct Daisy{{ name|capitalize }} {
     // Bmp390 pressure / temperature sensor
     {{ Bmp390 }}
     {% endif %}
+    {% if Vl53l1x != '' %}
+
+    // Vl53l1x time of flight sensor
+    {{ Vl53l1x }}
+    {% endif %}
+    {% if NeoTrellis != '' %}
+
+    // Adafruit Neo Trellis
+    {{ NeoTrellis }}
+    {% endif %}
+    {% if Bno055 != '' %}
+
+    // Bno055 9-DOF omega sensor
+    {{ Bno055 }}
+    {% endif %}
     {% if som == 'seed' and external_codecs|length > 0 %}
 
     // External Codec Initialization
