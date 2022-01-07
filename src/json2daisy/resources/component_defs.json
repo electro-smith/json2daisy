@@ -1288,5 +1288,57 @@
 				"get": "{class_name}.{name}.GetQuat().w"
 			}
 		]
+	},
+	"Icm20948": {
+		"map_init": "daisy::Icm20948I2CTransport::Config {name}_config;\n    {name}_config.periph = {periph};\n    {name}_config.speed = {speed};\n    {name}_config.scl = som.GetPin({pin_scl});\n    {name}_config.sda = som.GetPin({pin_sda});\n    {name}_config.address = {address};\n    daisy::Icm20948I2C::Config {name}_main_conf;\n    {name}_main_conf.transport_config = {name}_config;\n    {name}.Init({name}_main_conf);",
+		"typename": "daisy::Icm20948I2C",
+		"direction": "in",
+		"pin": "scl,sda",
+		"address": "ICM20948_I2CADDR_DEFAULT",
+		"periph": "daisy::I2CHandle::Config::Peripheral::I2C_1",
+		"speed": "daisy::I2CHandle::Config::Speed::I2C_400KHZ",
+		"loopprocess": "{name}.Process();",
+		"mapping": [
+			{
+				"name": "{name}",
+				"get": "{class_name}.{name}.GetAccelVect().x"
+			},
+			{
+				"name": "{name}_accel_x",
+				"get": "{class_name}.{name}.GetAccelVect().x"
+			},
+			{
+				"name": "{name}_accel_y",
+				"get": "{class_name}.{name}.GetAccelVect().y"
+			},
+			{
+				"name": "{name}_accel_z",
+				"get": "{class_name}.{name}.GetAccelVect().z"
+			},
+			{
+				"name": "{name}_magnet_x",
+				"get": "{class_name}.{name}.GetMagVect().x"
+			},
+			{
+				"name": "{name}_magnet_y",
+				"get": "{class_name}.{name}.GetMagVect().y"
+			},
+			{
+				"name": "{name}_magnet_z",
+				"get": "{class_name}.{name}.GetMagVect().z"
+			},
+			{
+				"name": "{name}_gyro_x",
+				"get": "{class_name}.{name}.GetGyroVect().x"
+			},
+			{
+				"name": "{name}_gyro_y",
+				"get": "{class_name}.{name}.GetGyroVect().y"
+			},
+			{
+				"name": "{name}_gyro_z",
+				"get": "{class_name}.{name}.GetGyroVect().z"
+			}
+		]
 	}
 }

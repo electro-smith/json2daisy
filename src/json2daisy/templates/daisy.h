@@ -174,6 +174,11 @@ struct Daisy{{ name|capitalize }} {
     // Bno055 9-DOF omega sensor
     {{ Bno055 }}
     {% endif %}
+    {% if Icm20948 != '' %}
+
+    // Icm20948 9-DOF sensor
+    {{ Icm20948 }}
+    {% endif %}
     {% if som == 'seed' and external_codecs|length > 0 %}
 
     // External Codec Initialization
