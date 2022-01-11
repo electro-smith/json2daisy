@@ -700,6 +700,23 @@
 			}
 		]
 	},
+	"Vl53l0x": {
+		"map_init": "daisy::Adafruit_VL53L0X::Config {name}_config;\n    {name}_config.periph = {periph};\n    {name}_config.speed = {speed};\n    {name}_config.scl = som.GetPin({pin_scl});\n    {name}_config.sda = som.GetPin({pin_sda});\n    {name}_config.dev_addr = {address};\n    {name}_config.vl_config = {vl_config};\n    {name}.Init({name}_config);",
+		"typename": "daisy::Adafruit_VL53L0X",
+		"direction": "in",
+		"pin": "scl,sda",
+		"address": "VL53L0X_I2C_ADDR",
+		"periph": "daisy::I2CHandle::Config::Peripheral::I2C_1",
+		"speed": "daisy::I2CHandle::Config::Speed::I2C_400KHZ",
+		"vl_config": "daisy::Adafruit_VL53L0X::VL53L0X_Sense_config_t::VL53L0X_SENSE_DEFAULT",
+		"loopprocess": "{name}.Process();",
+		"mapping": [
+			{
+				"name": "{name}",
+				"get": "{class_name}.{name}.GetRangeMilliMeter()"
+			}
+		]
+	},
 	"NeoTrellis": {
 		"map_init": "daisy::NeoTrellisI2CTransport::Config {name}_config;\n    {name}_config.periph = {periph};\n    {name}_config.speed = {speed};\n    {name}_config.scl = som.GetPin({pin_scl});\n    {name}_config.sda = som.GetPin({pin_sda});\n    {name}_config.address = {address};\n    daisy::NeoTrellisI2C::Config {name}_main_conf;\n    {name}_main_conf.transport_config = {name}_config;\n    {name}.Init({name}_main_conf);",
 		"typename": "daisy::NeoTrellisI2C",

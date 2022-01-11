@@ -164,6 +164,11 @@ struct Daisy{{ name|capitalize }} {
     // Vl53l1x time of flight sensor
     {{ Vl53l1x }}
     {% endif %}
+    {% if Vl53l0x != '' %}
+
+    // Vl53l0x time of flight sensor
+    {{ Vl53l0x }}
+    {% endif %}
     {% if NeoTrellis != '' %}
 
     // Adafruit Neo Trellis
