@@ -159,6 +159,11 @@ struct Daisy{{ name|capitalize }} {
     // Bmp390 pressure / temperature sensor
     {{ Bmp390 }}
     {% endif %}
+    {% if Dps310 != '' %}
+
+    // Dps310 pressure / temperature sensor
+    {{ Dps310 }}
+    {% endif %}
     {% if Vl53l1x != '' %}
 
     // Vl53l1x time of flight sensor
