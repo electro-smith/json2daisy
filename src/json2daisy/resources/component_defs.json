@@ -496,15 +496,15 @@
 		]
 	},
 	"HallSensor": {
-		"map_init": "daisy::HallSensor::Config {name}_config;\n    {name}_config.periph = {periph};\n    {name}_config.pin = som.GetPin({pin});\n    {name}.Init({name}_config);",
+		"map_init": "daisy::HallSensor::Config {name}_config;\n    {name}_config.pull = {typename}::{pull};\n    {name}_config.pin = som.GetPin({pin});\n    {name}.Init({name}_config);",
 		"typename": "daisy::HallSensor",
 		"direction": "in",
 		"pin": 14,
-		"periph": "daisy::HallSensor::Config::Peripheral::TIM_4",
+		"pull": "UP",
 		"mapping": [
 			{
 				"name": "{name}",
-				"get": "{class_name}.{name}.GetState()"
+				"get": "{class_name}.{name}.State()"
 			},
 			{
 				"name": "{name}_count",
@@ -513,7 +513,7 @@
 		]
 	},
 	"Tlv493d": {
-		"map_init": "daisy::Tlv493dI2CTransport::Config {name}_config;\n    {name}_config.periph = {periph};\n    {name}_config.speed = {speed};\n    {name}_config.scl = som.GetPin({pin_scl});\n    {name}_config.sda = som.GetPin({pin_sda});\n    daisy::Tlv493dI2C::Config {name}_main_conf;\n    {name}_main_conf.transport_config = {name}_config;\n    {name}_main_conf.address = {address};\n    {name}.Init({name}_main_conf);",
+		"map_init": "daisy::Tlv493dI2CTransport::Config {name}_config;\n    {name}_config.address = {address};\n    {name}_config.periph = {periph};\n    {name}_config.speed = {speed};\n    {name}_config.scl = som.GetPin({pin_scl});\n    {name}_config.sda = som.GetPin({pin_sda});\n    daisy::Tlv493dI2C::Config {name}_main_conf;\n    {name}_main_conf.transport_config = {name}_config;\n    {name}.Init({name}_main_conf);",
 		"typename": "daisy::Tlv493dI2C",
 		"direction": "in",
 		"pin": "scl,sda",
@@ -1113,91 +1113,91 @@
 		"map_init": "",
 		"parent": "",
 		"direction": "out",
-		"loopprocess": "{parent}.Show();",
+		"loopprocess": "{parent}.pixels.Show();",
 		"mapping": [
 			{
 				"name": "{name}",
-				"set": "{class_name}.{parent}.SetPixelColor(0, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
+				"set": "{class_name}.{parent}.pixels.SetPixelColor(0, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
 				"where": "main"
 			},
 			{
 				"name": "{name}_0",
-				"set": "{class_name}.{parent}.SetPixelColor(0, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
+				"set": "{class_name}.{parent}.pixels.SetPixelColor(0, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
 				"where": "main"
 			},
 			{
 				"name": "{name}_1",
-				"set": "{class_name}.{parent}.SetPixelColor(1, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
+				"set": "{class_name}.{parent}.pixels.SetPixelColor(1, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
 				"where": "main"
 			},
 			{
 				"name": "{name}_2",
-				"set": "{class_name}.{parent}.SetPixelColor(2, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
+				"set": "{class_name}.{parent}.pixels.SetPixelColor(2, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
 				"where": "main"
 			},
 			{
 				"name": "{name}_3",
-				"set": "{class_name}.{parent}.SetPixelColor(3, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
+				"set": "{class_name}.{parent}.pixels.SetPixelColor(3, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
 				"where": "main"
 			},
 			{
 				"name": "{name}_4",
-				"set": "{class_name}.{parent}.SetPixelColor(4, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
+				"set": "{class_name}.{parent}.pixels.SetPixelColor(4, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
 				"where": "main"
 			},
 			{
 				"name": "{name}_5",
-				"set": "{class_name}.{parent}.SetPixelColor(5, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
+				"set": "{class_name}.{parent}.pixels.SetPixelColor(5, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
 				"where": "main"
 			},
 			{
 				"name": "{name}_6",
-				"set": "{class_name}.{parent}.SetPixelColor(6, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
+				"set": "{class_name}.{parent}.pixels.SetPixelColor(6, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
 				"where": "main"
 			},
 			{
 				"name": "{name}_7",
-				"set": "{class_name}.{parent}.SetPixelColor(7, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
+				"set": "{class_name}.{parent}.pixels.SetPixelColor(7, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
 				"where": "main"
 			},
 			{
 				"name": "{name}_8",
-				"set": "{class_name}.{parent}.SetPixelColor(8, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
+				"set": "{class_name}.{parent}.pixels.SetPixelColor(8, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
 				"where": "main"
 			},
 			{
 				"name": "{name}_9",
-				"set": "{class_name}.{parent}.SetPixelColor(9, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
+				"set": "{class_name}.{parent}.pixels.SetPixelColor(9, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
 				"where": "main"
 			},
 			{
 				"name": "{name}_10",
-				"set": "{class_name}.{parent}.SetPixelColor(10, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
+				"set": "{class_name}.{parent}.pixels.SetPixelColor(10, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
 				"where": "main"
 			},
 			{
 				"name": "{name}_11",
-				"set": "{class_name}.{parent}.SetPixelColor(11, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
+				"set": "{class_name}.{parent}.pixels.SetPixelColor(11, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
 				"where": "main"
 			},
 			{
 				"name": "{name}_12",
-				"set": "{class_name}.{parent}.SetPixelColor(12, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
+				"set": "{class_name}.{parent}.pixels.SetPixelColor(12, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
 				"where": "main"
 			},
 			{
 				"name": "{name}_13",
-				"set": "{class_name}.{parent}.SetPixelColor(13, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
+				"set": "{class_name}.{parent}.pixels.SetPixelColor(13, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
 				"where": "main"
 			},
 			{
 				"name": "{name}_14",
-				"set": "{class_name}.{parent}.SetPixelColor(14, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
+				"set": "{class_name}.{parent}.pixels.SetPixelColor(14, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
 				"where": "main"
 			},
 			{
 				"name": "{name}_15",
-				"set": "{class_name}.{parent}.SetPixelColor(15, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
+				"set": "{class_name}.{parent}.pixels.SetPixelColor(15, {class_name}.{parent}.pixels.Color({value}, {value}, {value}));",
 				"where": "main"
 			}
 		]
