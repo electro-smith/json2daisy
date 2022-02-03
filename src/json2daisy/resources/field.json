@@ -320,16 +320,6 @@
       "component": "PCA9685Led",
       "index": 23,
       "parent": "led_driver"
-    },
-    "led_sw_1": {
-      "component": "PCA9685Led",
-      "index": 24,
-      "parent": "led_driver"
-    },
-    "led_sw_2": {
-      "component": "PCA9685Led",
-      "index": 25,
-      "parent": "led_driver"
     }
   },
   "aliases": {
