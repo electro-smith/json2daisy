@@ -211,7 +211,7 @@
 			},
 			{
 				"name": "{name}",
-				"set": "{class_name}.{name}.Set(clamp(-{value}, 0.f, 1.f), 0.f, clamp({value}, 0.f, 1.f));"
+				"set": "{class_name}.{name}.Set({value},{value},{value});"
 			},
 			{
 				"name": "{name}_white",
@@ -229,7 +229,8 @@
 		"mapping": [
 			{
 				"name": "{name}",
-				"set": "dsy_gpio_write(&{class_name}.{name}, {value});"
+				"set": "dsy_gpio_write(&{class_name}.{name}, {value});",
+				"where": "hook"
 			}
 		]
 	},
@@ -285,7 +286,8 @@
 		"mapping": [
 			{
 				"name": "{name}",
-				"set": "{class_name}.{parent}.SetLed({index}, {value});"
+				"set": "{class_name}.{parent}.SetLed({index}, {value});",
+				"where": "hook"
 			}
 		]
 	},
@@ -303,23 +305,28 @@
 		"mapping": [
 			{
 				"name": "{name}_red",
-				"set": "{class_name}.{parent}.SetLed({index_red}, {value});"
+				"set": "{class_name}.{parent}.SetLed({index_red}, {value});",
+				"where": "hook"
 			},
 			{
 				"name": "{name}_green",
-				"set": "{class_name}.{parent}.SetLed({index_green}, {value});"
+				"set": "{class_name}.{parent}.SetLed({index_green}, {value});",
+				"where": "hook"
 			},
 			{
 				"name": "{name}_blue",
-				"set": "{class_name}.{parent}.SetLed({index_blue}, {value});"
+				"set": "{class_name}.{parent}.SetLed({index_blue}, {value});",
+				"where": "hook"
 			},
 			{
 				"name": "{name}",
-				"set": "{class_name}.{parent}.SetLed({index_red}, {value});\n    {class_name}.{parent}.SetLed({index_green}, {value});\n    {class_name}.{parent}.SetLed({index_blue}, {value});"
+				"set": "{class_name}.{parent}.SetLed({index_red}, {value});\n    {class_name}.{parent}.SetLed({index_green}, {value});\n    {class_name}.{parent}.SetLed({index_blue}, {value});",
+				"where": "hook"
 			},
 			{
 				"name": "{name}_white",
-				"set": "{class_name}.{parent}.SetLed({index_red}, {value});\n    {class_name}.{parent}.SetLed({index_green}, {value});\n    {class_name}.{parent}.SetLed({index_blue}, {value});"
+				"set": "{class_name}.{parent}.SetLed({index_red}, {value});\n    {class_name}.{parent}.SetLed({index_green}, {value});\n    {class_name}.{parent}.SetLed({index_blue}, {value});",
+				"where": "hook"
 			}
 		]
 	},
