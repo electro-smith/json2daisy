@@ -4,6 +4,8 @@ Utility for converting JSON board definitions into valid, [libDaisy](https://git
 
 ## Install
 
+Note that this module is not intended as a standalone application at this time. You should not need to install it manually for most use cases.
+
 You can install this package with pip:
 ~~~
 python -m pip install json2daisy
