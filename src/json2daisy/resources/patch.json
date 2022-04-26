@@ -6,8 +6,8 @@
 	},
 	"display": {},
 	"audio": {
-    "channels": 4
-  },
+		"channels": 4
+	},
 	"external_codecs": [
 		{
 			"periph": "SAI_2",

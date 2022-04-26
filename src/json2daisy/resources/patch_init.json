@@ -3,8 +3,8 @@
 	"som": "patch_sm",
 	"defines": {},
 	"audio": {
-    "channels": 2
-  },
+		"channels": 2
+	},
 	"components": {
 		"cv_1": {
 			"component": "AnalogControl",
