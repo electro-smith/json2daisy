@@ -8,6 +8,8 @@
 #include "dev/codec_ak4556.h"
 {% elif som == 'patch_sm' %}
 #include "daisy_patch_sm.h"
+{% elif som == 'petal_125b_sm' %}
+#include "daisy_petal_125b_sm.h"
 {% endif %}
 {{display_conditional}}
 
@@ -260,7 +262,7 @@ struct Daisy{{ name|capitalize }} {
     {% if process != '' %} 
     {{ process }} 
     {% endif %}
-    {% if som == 'patch_sm' %}
+    {% if som != 'seed' %}
     som.ProcessAllControls();
     {% endif %}
   }
@@ -271,6 +273,9 @@ struct Daisy{{ name|capitalize }} {
   void PostProcess()
   {
     {{postprocess}}
+    {% if som == 'petal_125b_sm' %}
+    som.UpdateLeds();
+    {% endif %}
   }
 
   /** Handles processing that shouldn't occur in the audio block, such as blocking transfers
@@ -286,7 +291,7 @@ struct Daisy{{ name|capitalize }} {
    */
   void SetAudioSampleRate(size_t sample_rate) 
   {
-    {% if som == 'seed' %}
+    {% if som == 'seed' or som == 'petal_125b_sm' %}
     daisy::SaiHandle::Config::SampleRate enum_rate;
     if (sample_rate >= 96000)
       enum_rate = daisy::SaiHandle::Config::SampleRate::SAI_96KHZ;

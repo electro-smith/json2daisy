@@ -110,7 +110,8 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
 
   seed_defs = os.path.join("resources", 'component_defs.json')
   patchsm_defs = os.path.join("resources", 'component_defs_patchsm.json')
-  definitions = {'seed': seed_defs, 'patch_sm': patchsm_defs}
+  petalsm_defs = os.path.join("resources", 'component_defs_petalsm.json')
+  definitions = {'seed': seed_defs, 'patch_sm': patchsm_defs, 'petal_125b_sm': petalsm_defs}
   som = target.get('som', 'seed')
 
   global json_defs_file
@@ -151,7 +152,14 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
   replacements['name'] = target['name']
   replacements['som'] = som
   replacements['external_codecs'] = target.get('external_codecs', [])
-  replacements['som_class'] = 'daisy::DaisySeed' if som == 'seed' else 'daisy::patch_sm::DaisyPatchSM'
+
+  som_classes = {
+    'seed': 'daisy::DaisySeed',
+    'patch_sm': 'daisy::patch_sm::DaisyPatchSM',
+    'petal_125b_sm': 'daisy::Petal125BSM',
+  }
+
+  replacements['som_class'] = som_classes.get(som, som_classes['seed'])
 
   replacements['display_conditional'] = ('#include "dev/oled_ssd130x.h"' if ('display' in target) else  "")
   replacements['target_name'] = target['name']
