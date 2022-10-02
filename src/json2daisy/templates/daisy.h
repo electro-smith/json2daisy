@@ -24,7 +24,7 @@ struct Daisy{{ name|capitalize }} {
   /** Initializes the board according to the JSON board description
    *  \param boost boosts the clock speed from 400 to 480 MHz
    */
-  void Init(bool boost=true) 
+  void Init(bool boost=true)
   {
     {% if som == 'seed' %}
     som.Configure();
@@ -32,89 +32,89 @@ struct Daisy{{ name|capitalize }} {
     {% else %}
     som.Init();
     {% endif %}
-    {% if init != '' %} 
+    {% if init != '' %}
 
-    {{init}} 
+    {{init}}
     {% endif %}
     {% if i2c != '' %}
 
     // i2c
-    {{ i2c }} 
+    {{ i2c }}
     {% endif %}
-    {% if PCA9685 != '' %} 
+    {% if PCA9685 != '' %}
 
     // LED Drivers
-    {{ PCA9685 }} 
+    {{ PCA9685 }}
     {% endif %}
-    {% if Switch != '' %} 
+    {% if Switch != '' %}
 
     // Switches
-    {{ Switch }} 
+    {{ Switch }}
     {% endif %}
     {% if Switch3 != '' %}
 
     // SPDT Switches
-    {{ Switch3 }} 
+    {{ Switch3 }}
     {% endif %}
-    {% if CD4021 != '' %} 
+    {% if CD4021 != '' %}
 
     // Muxes
-    {{ CD4021 }} 
+    {{ CD4021 }}
     {% endif %}
-    {% if GateIn != '' %} 
+    {% if GateIn != '' %}
 
     // Gate ins
-    {{ GateIn }} 
+    {{ GateIn }}
     {% endif %}
-    {% if Encoder != '' %} 
+    {% if Encoder != '' %}
 
     // Rotary encoders
-    {{ Encoder }} 
+    {{ Encoder }}
     {% endif %}
-    {% if init_single != '' %} 
+    {% if init_single != '' %}
 
     // Single channel ADC initialization
-    {{ init_single }} 
+    {{ init_single }}
     {% endif %}
     {% if som == 'seed' %}
     {% if analogcount > 0 %}
     som.adc.Init(cfg, ANALOG_COUNT);
     {% endif %}
     {% endif %}
-    {% if ctrl_init != '' %} 
+    {% if ctrl_init != '' %}
 
     // AnalogControl objects
-    {{ ctrl_init }} 
+    {{ ctrl_init }}
     {% endif %}
-    {% if CD4051AnalogControl != '' %} 
+    {% if CD4051AnalogControl != '' %}
 
     // Multiplexed AnlogControl objects
-    {{ CD4051AnalogControl }} 
+    {{ CD4051AnalogControl }}
     {% endif %}
-    {% if Led != '' %} 
+    {% if Led != '' %}
 
     // LEDs
-    {{ Led }} 
+    {{ Led }}
     {% endif %}
     {% if RgbLed != '' %}
 
-    // RBG LEDs 
-    {{ RgbLed }} 
+    // RBG LEDs
+    {{ RgbLed }}
     {% endif %}
-    {% if GateOut != '' %} 
+    {% if GateOut != '' %}
 
     // Gate outs
-    {{ GateOut }} 
+    {{ GateOut }}
     {% endif %}
     {% if CVOuts != '' %}
 
-    // DAC 
-    {{ CVOuts }} 
+    // DAC
+    {{ CVOuts }}
     {% endif %}
     {% if display != '' %}
 
     // Display
-    {{ display }} 
+    {{ display }}
     {% endif %}
     {% if MotorShield != '' %}
 
@@ -239,7 +239,7 @@ struct Daisy{{ name|capitalize }} {
     cfg.samplerate = daisy::SaiHandle::Config::SampleRate::SAI_48KHZ;
     cfg.postgain   = 0.5f;
     som.audio_handle.Init(
-      cfg, 
+      cfg,
       sai_handle[0]
       {% for codec in external_codecs %}
       ,sai_handle[{{loop.index}}]
@@ -255,12 +255,12 @@ struct Daisy{{ name|capitalize }} {
   }
 
   /** Handles all the controls processing that needs to occur at the block rate
-   * 
+   *
    */
-  void ProcessAllControls() 
+  void ProcessAllControls()
   {
-    {% if process != '' %} 
-    {{ process }} 
+    {% if process != '' %}
+    {{ process }}
     {% endif %}
     {% if som != 'seed' %}
     som.ProcessAllControls();
@@ -268,7 +268,7 @@ struct Daisy{{ name|capitalize }} {
   }
 
   /** Handles all the maintenance processing. This should be run last within the audio callback.
-   * 
+   *
    */
   void PostProcess()
   {
@@ -279,7 +279,7 @@ struct Daisy{{ name|capitalize }} {
   }
 
   /** Handles processing that shouldn't occur in the audio block, such as blocking transfers
-   * 
+   *
    */
   void LoopProcess()
   {
@@ -289,7 +289,7 @@ struct Daisy{{ name|capitalize }} {
   /** Sets the audio sample rate
    *  \param sample_rate the new sample rate in Hz
    */
-  void SetAudioSampleRate(size_t sample_rate) 
+  void SetAudioSampleRate(size_t sample_rate)
   {
     {% if som == 'seed' or som == 'petal_125b_sm' %}
     daisy::SaiHandle::Config::SampleRate enum_rate;
@@ -313,13 +313,13 @@ struct Daisy{{ name|capitalize }} {
   /** Sets the audio block size
    *  \param block_size the new block size in words
    */
-  inline void SetAudioBlockSize(size_t block_size) 
+  inline void SetAudioBlockSize(size_t block_size)
   {
     som.SetAudioBlockSize(block_size);
   }
 
   /** Starts up the audio callback process with the given callback
-   * 
+   *
    */
   inline void StartAudio(daisy::AudioHandle::AudioCallback cb)
   {
@@ -335,6 +335,8 @@ struct Daisy{{ name|capitalize }} {
   // I/O Components
   {{comps}}
   {{dispdec}}
+  daisy::MidiUartHandler midi;
+  daisy::MidiUsbHandler midiusb;
 
 };
 
