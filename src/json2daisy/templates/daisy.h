@@ -335,8 +335,7 @@ struct Daisy{{ name|capitalize }} {
   // I/O Components
   {{comps}}
   {{dispdec}}
-  daisy::MidiUartHandler midi;
-  daisy::MidiUsbHandler midiusb;
+  {{midi}}
 
 };
 

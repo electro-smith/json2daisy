@@ -19,7 +19,7 @@ def map_load(pair):
 		# copy component defs into the def
 		# TODO this should be recursive for object structures..
 		for k in component:
-			if not k in pair[1]: 
+			if not k in pair[1]:
 				pair[1][k] = component[k]
 	else:
 		raise Exception(f'unknown component "{pair[1]["component"]}"')
@@ -47,7 +47,7 @@ def filter_has(set, key, key_exclude=None, match_exclude=None):
 # filter out the components we need, then map them onto the init for that part
 def filter_map_init(set, key, match, key_exclude=None, match_exclude=None):
 	filtered = filter_match(set, key, match, key_exclude=key_exclude, match_exclude=match_exclude)
-	return "\n    ".join(map(lambda x: x['map_init'].format_map(x), filtered)) 
+	return "\n    ".join(map(lambda x: x['map_init'].format_map(x), filtered))
 
 def filter_map_set(set, key, match, key_exclude=None, match_exclude=None):
 	filtered = filter_match(set, key, match, key_exclude=key_exclude, match_exclude=match_exclude)
@@ -88,9 +88,9 @@ def flatten_index_dicts(comp):
 def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
 
   """
-  Generate a C++ Daisy board header from a dictionary board description. 
+  Generate a C++ Daisy board header from a dictionary board description.
 
-  Returns a tuple containing the board 
+  Returns a tuple containing the board
   header as a string and an information dictionary.
 
   The dictionary provides sufficient information to
@@ -99,7 +99,7 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
   """
 
   target = board_description_dict
-  
+
   # flesh out target components:
   components = target.get('components', {})
   parents = target.get('parents', {})
@@ -143,7 +143,7 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
       'config': [],
       'dim': [128, 64]
     }
-    
+
     target['defines']['OOPSY_TARGET_HAS_OLED'] = 1
     target['defines']['OOPSY_OLED_DISPLAY_WIDTH'] = target['display']['dim'][0]
     target['defines']['OOPSY_OLED_DISPLAY_HEIGHT'] = target['display']['dim'][1]
@@ -168,7 +168,7 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
   replacements['analogcount'] = len(list(filter_matches(components, 'component', ['AnalogControl', 'AnalogControlBipolar', 'CD4051'], key_exclude='default', match_exclude=True)))
 
   replacements['init_single'] = filter_map_ctrl(components, 'component', ['AnalogControl', 'AnalogControlBipolar', 'CD4051'], 'init_single', key_exclude='default', match_exclude=True)
-  replacements['ctrl_init'] = filter_map_ctrl(components, 'component', ['AnalogControl', 'AnalogControlBipolar'], 'map_init', key_exclude='default', match_exclude=True)	
+  replacements['ctrl_init'] = filter_map_ctrl(components, 'component', ['AnalogControl', 'AnalogControlBipolar'], 'map_init', key_exclude='default', match_exclude=True)
 
   comp_string = pkg_resources.resource_string(__name__, json_defs_file)
   definitions_dict = json.loads(comp_string)
@@ -176,7 +176,7 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
   for name in definitions_dict:
     if name not in ('AnalogControl', 'AnalogControlBipolar', 'CD4051'):
       replacements[name] = filter_map_init(components, 'component', name, key_exclude='default', match_exclude=True)
-  
+
   if 'display' in target:
     replacements['dispdec'] = f'daisy::OledDisplay<{target["display"]["driver"]}> display;'
     replacements['display'] = f"""
@@ -189,6 +189,12 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
     """
   else:
     replacements['display'] = ''
+
+  if target['defines'].get('OOPSY_TARGET_HAS_MIDI_INPUT'):
+    replacements['midi'] = """
+  daisy::MidiUartHandler midi;
+  daisy::MidiUsbHandler midiusb;
+    """
 
   replacements['process'] = filter_map_template(components, 'process', key_exclude='default', match_exclude=True)
   replacements['loopprocess'] = filter_map_template(components, 'loopprocess', key_exclude='default', match_exclude=True)
@@ -207,7 +213,7 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
   non_class_declarations = list(filter(lambda x: 'non_class_decl' in x, component_declarations))
   if len(non_class_declarations) > 0:
     replacements['non_class_declarations'] = "\n".join(map(lambda x: x['non_class_decl'].format_map(x), non_class_declarations))
-  
+
   env_opts = {"trim_blocks": True, "lstrip_blocks": True}
 
   # Ideally, this would be what we use, but we'll need to get the jinja PackageLoader class working
@@ -220,7 +226,7 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
   header_env = jinja2.Environment(loader=jinja2.BaseLoader(), **env_opts).from_string(header_str.decode('utf-8'))
 
   rendered_header = header_env.render(replacements)
-  
+
   # removing all unnecessary fields
   for comp in components:
     if 'map_init' in comp:
@@ -231,7 +237,7 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
   audio_info = target.get('audio', None)
   audio_channels = audio_info.get('channels', 2) if audio_info is not None else 2
 
-  # This dictionary contains the necessary information to automatically (or manually) 
+  # This dictionary contains the necessary information to automatically (or manually)
   # write code to interface with the generated board
   board_info = {
     'name': target['name'],
@@ -247,9 +253,9 @@ def generate_header_from_file(description_file: str) -> 'tuple[str, dict]':
   """
   Generate a C++ Daisy board header from a JSON description file.
 
-  Returns a tuple containing the board 
+  Returns a tuple containing the board
   header as a string and an information dictionary.
-  
+
   The dictionary provides sufficient information to
   generate interface code, including component getters
   and setters, audio channel count, etc.
@@ -257,7 +263,7 @@ def generate_header_from_file(description_file: str) -> 'tuple[str, dict]':
 
   with open(description_file, 'rb') as file:
     daisy_description = json.load(file)
-  
+
   return generate_header(daisy_description)
 
 def generate_header_from_name(board_name: str) -> 'tuple[str, dict]':
@@ -265,9 +271,9 @@ def generate_header_from_name(board_name: str) -> 'tuple[str, dict]':
   """
   Generate a C++ Daisy board header for an existing daisy board.
 
-  Returns a tuple containing the board 
+  Returns a tuple containing the board
   header as a string and an information dictionary.
-  
+
   The dictionary provides sufficient information to
   generate interface code, including component getters
   and setters, audio channel count, etc.
@@ -279,6 +285,5 @@ def generate_header_from_name(board_name: str) -> 'tuple[str, dict]':
     daisy_description = json.loads(daisy_description)
   except FileNotFoundError:
     raise FileNotFoundError(f'Unknown Daisy board "{board_name}"')
-  
+
   return generate_header(daisy_description)
-  
