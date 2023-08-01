@@ -25,11 +25,11 @@ clarified_components = {
 }
 
 
-def gen_row(items):
+def gen_row(items: list) -> str:
     return f'| {" | ".join(items)} |\n'
 
 
-def gen_table(column_headers, rows):
+def gen_table(column_headers: list, rows: list) -> str:
     for row in rows:
         if len(row) > len(column_headers):
             raise OverflowError("A row exceeds the given table width")
@@ -48,7 +48,7 @@ def gen_table(column_headers, rows):
     return table
 
 
-def get_default(som, component):
+def get_default(som: str, component: str) -> dict:
     defaults_path = path.join(json_path, 'component_defaults.json')
     defaults_sm_path = path.join(json_path, 'component_defaults_patchsm.json')
     if som == 'seed':
@@ -60,7 +60,7 @@ def get_default(som, component):
     return defaults[component]
 
 
-def extract_rows(json_file):
+def extract_rows(json_file: str) -> list:
     with open(json_file, 'rb') as file:
         description = json.load(file)
 
