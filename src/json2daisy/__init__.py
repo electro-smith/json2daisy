@@ -1,1 +1,1 @@
-from .json2daisy import *
+from .json2daisy import *  # noqa
