@@ -3,7 +3,7 @@ import json
 import os
 import pkg_resources
 
-from typing import Optional, Any
+from typing import Optional
 
 json_defs_file = ''
 
