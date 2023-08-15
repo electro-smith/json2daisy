@@ -84,7 +84,7 @@ def filter_map_init(
 def filter_map_set(
     component_set: list,
     key: str,
-    match,
+    match: str,
     key_exclude: Optional[str] = None,
     match_exclude: bool = False
 ) -> str:
