@@ -23,19 +23,19 @@
  * 
  */
 
-#ifndef __JSON2DAISY_PATCH_INIT_H__
-#define __JSON2DAISY_PATCH_INIT_H__
+#ifndef __JSON2DAISY_PETAL_125B_SM_H__
+#define __JSON2DAISY_PETAL_125B_SM_H__
 
-#include "daisy_patch_sm.h"
+#include "daisy_petal_125b_sm.h"
 
 
-#define ANALOG_COUNT 0
+#define ANALOG_COUNT 6
 
 namespace json2daisy {
 
 
 
-struct DaisyPatch_init {
+struct DaisyPetal_125b_sm {
 
   /** Initializes the board according to the JSON board description
    *  \param boost boosts the clock speed from 400 to 480 MHz
@@ -53,18 +53,99 @@ struct DaisyPatch_init {
  
 
     // Switches
-    sw1.Init(daisy::patch_sm::DaisyPatchSM::B7, som.AudioCallbackRate(), daisy::Switch::TYPE_MOMENTARY, daisy::Switch::POLARITY_INVERTED, daisy::Switch::PULL_UP);
-    sw2.Init(daisy::patch_sm::DaisyPatchSM::B8, som.AudioCallbackRate(), daisy::Switch::TYPE_MOMENTARY, daisy::Switch::POLARITY_INVERTED, daisy::Switch::PULL_UP); 
+    
+     
+
+    // SPDT Switches
+    
+    
+     
  
 
     // Muxes
      
  
 
+    // Gate ins
+     
+ 
+
+    // Rotary encoders
+     
+ 
+
+    // Single channel ADC initialization
+    
+    
+    
+    
+    
+     
+ 
+
+    // AnalogControl objects
+    
+    
+    
+    
+    
+     
+ 
+
     // Multiplexed AnlogControl objects
      
 
+    // RBG LEDs 
+    
+     
+ 
+
+    // Gate outs
+     
+
+    // DAC 
+     
+
+    // Adafruit Motor Shield
+    
+
+    // Stepper motor pointer from the Adafruit Motor Shield
+    
+
+    // DC motor pointer from the Adafruit Motor Shield
+    
+
+    // BME280 pressure/temperature/humidity sensor
+    
+
+    // Hall sensor
+    
+
+    // Accelerometer
+    
+
+    // Capacitive sensor
+    
+
+    // Gesture / color sensor
+    
+
+    // Bmp390 pressure / temperature sensor
+    
+
     // Dps310 pressure / temperature sensor
+    
+
+    // Vl53l1x time of flight sensor
+    
+
+    // Vl53l0x time of flight sensor
+    
+
+    // Adafruit Neo Trellis
+    
+
+    // Bno055 9-DOF omega sensor
     
 
     // Icm20948 9-DOF sensor
@@ -77,9 +158,6 @@ struct DaisyPatch_init {
    */
   void ProcessAllControls() 
   {
- 
-    sw1.Debounce();
-    sw2.Debounce(); 
     som.ProcessAllControls();
   }
 
@@ -89,6 +167,7 @@ struct DaisyPatch_init {
   void PostProcess()
   {
     
+    som.UpdateLeds();
   }
 
   /** Handles processing that shouldn't occur in the audio block, such as blocking transfers
@@ -104,9 +183,19 @@ struct DaisyPatch_init {
    */
   void SetAudioSampleRate(size_t sample_rate) 
   {
-    som.SetAudioSampleRate(sample_rate);
-    sw1.SetUpdateRate(som.AudioCallbackRate());
-    sw2.SetUpdateRate(som.AudioCallbackRate());
+    daisy::SaiHandle::Config::SampleRate enum_rate;
+    if (sample_rate >= 96000)
+      enum_rate = daisy::SaiHandle::Config::SampleRate::SAI_96KHZ;
+    else if (sample_rate >= 48000)
+      enum_rate = daisy::SaiHandle::Config::SampleRate::SAI_48KHZ;
+    else if (sample_rate >= 32000)
+      enum_rate = daisy::SaiHandle::Config::SampleRate::SAI_32KHZ;
+    else if (sample_rate >= 16000)
+      enum_rate = daisy::SaiHandle::Config::SampleRate::SAI_16KHZ;
+    else
+      enum_rate = daisy::SaiHandle::Config::SampleRate::SAI_8KHZ;
+    som.SetAudioSampleRate(enum_rate);
+    
   }
 
   /** Sets the audio block size
@@ -126,15 +215,14 @@ struct DaisyPatch_init {
   }
 
   /** This is the board's "System On Module" */
-  daisy::patch_sm::DaisyPatchSM som;
+  daisy::Petal125BSM som;
 
   // I/O Components
-  daisy::Switch sw1;
-  daisy::Switch sw2;
+  
   
 
 };
 
 } // namspace json2daisy
 
-#endif // __JSON2DAISY_PATCH_INIT_H__
+#endif // __JSON2DAISY_PETAL_125B_SM_H__

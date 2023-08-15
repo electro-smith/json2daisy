@@ -49,9 +49,9 @@ struct DaisyPatch {
 
     // Gate ins
     dsy_gpio_pin gatein1_pin = som.GetPin(20);
-    gatein1.Init(&gatein1_pin);
+    gatein1.Init(&gatein1_pin, true);
     dsy_gpio_pin gatein2_pin = som.GetPin(19);
-    gatein2.Init(&gatein2_pin); 
+    gatein2.Init(&gatein2_pin, true); 
  
 
     // Rotary encoders
@@ -67,10 +67,10 @@ struct DaisyPatch {
  
 
     // AnalogControl objects
-    knob1.Init(som.adc.GetPtr(0), som.AudioCallbackRate(), false, false);
-    knob2.Init(som.adc.GetPtr(1), som.AudioCallbackRate(), false, false);
-    knob3.Init(som.adc.GetPtr(2), som.AudioCallbackRate(), false, false);
-    knob4.Init(som.adc.GetPtr(3), som.AudioCallbackRate(), false, false); 
+    knob1.Init(som.adc.GetPtr(0), som.AudioCallbackRate(), true, false);
+    knob2.Init(som.adc.GetPtr(1), som.AudioCallbackRate(), true, false);
+    knob3.Init(som.adc.GetPtr(2), som.AudioCallbackRate(), true, false);
+    knob4.Init(som.adc.GetPtr(3), som.AudioCallbackRate(), true, false); 
  
 
     // Gate outs
