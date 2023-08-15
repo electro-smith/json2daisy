@@ -30,6 +30,12 @@ class TestIntegration(unittest.TestCase):
         with open(path.join(data_path, 'integration', 'expected_petal.h'), 'r') as file:
           self.assertEqual(header, file.read(), 'The output string should match "expected_petal.h" exactly')
 
+    def test_petal_125b_sm(self):
+        self.maxDiff = None
+        header, info = json2daisy.generate_header_from_name('petal_125b_sm')
+        with open(path.join(data_path, 'integration', 'expected_petal_125b_sm.h'), 'r') as file:
+          self.assertEqual(header, file.read(), 'The output string should match "expected_petal_125b_sm.h" exactly')
+
     def test_pod(self):
         self.maxDiff = None
         header, info = json2daisy.generate_header_from_name('pod')

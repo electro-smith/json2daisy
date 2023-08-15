@@ -51,7 +51,7 @@ struct DaisyPetal {
  
 
     // LED Drivers
-    led_driver.Init(i2c, {0x00, 0x02}, led_driver_dma_buffer_a, led_driver_dma_buffer_b); 
+    led_driver.Init(i2c, {0x00, 0x01}, led_driver_dma_buffer_a, led_driver_dma_buffer_b); 
  
 
     // Switches
