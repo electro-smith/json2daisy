@@ -95,13 +95,13 @@ struct DaisyPatch {
 
     // Display
     
-    daisy::OledDisplay<daisy::SSD130x4WireSpi128x64Driver>::Config display_config;
-    display_config.driver_config.transport_config.Defaults();
-    
-    display.Init(display_config);
-      display.Fill(0);
-      display.Update();
-     
+        daisy::OledDisplay<daisy::SSD130x4WireSpi128x64Driver>::Config display_config;
+        display_config.driver_config.transport_config.Defaults();
+        
+        display.Init(display_config);
+          display.Fill(0);
+          display.Update();
+         
 
     // External Codec Initialization
     daisy::SaiHandle::Config sai_config[2];
