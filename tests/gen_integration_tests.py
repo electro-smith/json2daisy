@@ -17,10 +17,10 @@ abs_path = path.dirname(path.abspath(__file__))
 data_path = path.join(abs_path, 'data')
 integration_path = path.join(data_path, 'integration')
 
-import json2daisy
+import json2daisy  # noqa
 
 if path.isdir(integration_path):
-  shutil.rmtree(integration_path)
+    shutil.rmtree(integration_path)
 mkdir(integration_path)
 
 non_templates = ['component_defs', 'component_defs_patchsm', 'LICENSE']
@@ -51,12 +51,12 @@ test_template = """
 """
 
 for template_name in included_json:
-  if template_name not in non_templates:
-    header, info = json2daisy.generate_header_from_name(template_name)
-    template_test_path = path.join('integration', f'expected_{info["name"]}.h')
-    with open(path.join(data_path, template_test_path), 'w') as file:
-      file.write(header)
-    test_file += test_template.format_map({'name': info['name']})
+    if template_name not in non_templates:
+        header, info = json2daisy.generate_header_from_name(template_name)
+        template_test_path = path.join('integration', f'expected_{info["name"]}.h')
+        with open(path.join(data_path, template_test_path), 'w') as file:
+            file.write(header)
+        test_file += test_template.format_map({'name': info['name']})
 
 with open(path.join(abs_path, 'integration_test.py'), 'w') as file:
-  file.write(test_file)
+    file.write(test_file)

@@ -66,7 +66,7 @@ struct DaisyField {
 
     // Gate ins
     dsy_gpio_pin gatein_pin = som.GetPin(0);
-    gatein.Init(&gatein_pin); 
+    gatein.Init(&gatein_pin, true); 
  
 
     // Single channel ADC initialization
@@ -119,13 +119,13 @@ struct DaisyField {
 
     // Display
     
-    daisy::OledDisplay<daisy::SSD130x4WireSpi128x64Driver>::Config display_config;
-    display_config.driver_config.transport_config.Defaults();
-    
-    display.Init(display_config);
-      display.Fill(0);
-      display.Update();
-     
+        daisy::OledDisplay<daisy::SSD130x4WireSpi128x64Driver>::Config display_config;
+        display_config.driver_config.transport_config.Defaults();
+        
+        display.Init(display_config);
+          display.Fill(0);
+          display.Update();
+         
 
     som.adc.Start();
   }
@@ -158,14 +158,6 @@ struct DaisyField {
   void PostProcess()
   {
     pad_shift.Update();
-    pad_shift_debounced[0] = pad_shift.State(0) | (pad_shift_debounced[0] << 1);
-    pad_shift_debounced[1] = pad_shift.State(1) | (pad_shift_debounced[1] << 1);
-    pad_shift_debounced[2] = pad_shift.State(2) | (pad_shift_debounced[2] << 1);
-    pad_shift_debounced[3] = pad_shift.State(3) | (pad_shift_debounced[3] << 1);
-    pad_shift_debounced[4] = pad_shift.State(4) | (pad_shift_debounced[4] << 1);
-    pad_shift_debounced[5] = pad_shift.State(5) | (pad_shift_debounced[5] << 1);
-    pad_shift_debounced[6] = pad_shift.State(6) | (pad_shift_debounced[6] << 1);
-    pad_shift_debounced[7] = pad_shift.State(7) | (pad_shift_debounced[7] << 1);
     pad_shift_debounced[15] = pad_shift.State(15) | (pad_shift_debounced[15] << 1);
     pad_shift_debounced[14] = pad_shift.State(14) | (pad_shift_debounced[14] << 1);
     pad_shift_debounced[13] = pad_shift.State(13) | (pad_shift_debounced[13] << 1);
@@ -174,6 +166,14 @@ struct DaisyField {
     pad_shift_debounced[10] = pad_shift.State(10) | (pad_shift_debounced[10] << 1);
     pad_shift_debounced[9] = pad_shift.State(9) | (pad_shift_debounced[9] << 1);
     pad_shift_debounced[8] = pad_shift.State(8) | (pad_shift_debounced[8] << 1);
+    pad_shift_debounced[7] = pad_shift.State(7) | (pad_shift_debounced[7] << 1);
+    pad_shift_debounced[6] = pad_shift.State(6) | (pad_shift_debounced[6] << 1);
+    pad_shift_debounced[5] = pad_shift.State(5) | (pad_shift_debounced[5] << 1);
+    pad_shift_debounced[4] = pad_shift.State(4) | (pad_shift_debounced[4] << 1);
+    pad_shift_debounced[3] = pad_shift.State(3) | (pad_shift_debounced[3] << 1);
+    pad_shift_debounced[2] = pad_shift.State(2) | (pad_shift_debounced[2] << 1);
+    pad_shift_debounced[1] = pad_shift.State(1) | (pad_shift_debounced[1] << 1);
+    pad_shift_debounced[0] = pad_shift.State(0) | (pad_shift_debounced[0] << 1);
   }
 
   /** Handles processing that shouldn't occur in the audio block, such as blocking transfers
