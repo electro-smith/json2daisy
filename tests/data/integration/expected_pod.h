@@ -50,14 +50,6 @@ struct DaisyPod {
     // Switches
     sw1.Init(som.GetPin(27), som.AudioCallbackRate(), daisy::Switch::TYPE_MOMENTARY, daisy::Switch::POLARITY_INVERTED, daisy::Switch::PULL_UP);
     sw2.Init(som.GetPin(28), som.AudioCallbackRate(), daisy::Switch::TYPE_MOMENTARY, daisy::Switch::POLARITY_INVERTED, daisy::Switch::PULL_UP); 
-
-    // SPDT Switches
-    sw3.Init(som.GetPin(1), som.GetPin(2)); 
- 
-
-    // Gate ins
-    dsy_gpio_pin gatein_pin = som.GetPin(12);
-    gatein.Init(&gatein_pin); 
  
 
     // Rotary encoders
@@ -73,11 +65,6 @@ struct DaisyPod {
     // AnalogControl objects
     knob1.Init(som.adc.GetPtr(0), som.AudioCallbackRate(), false, false);
     knob2.Init(som.adc.GetPtr(1), som.AudioCallbackRate(), false, false); 
- 
-
-    // LEDs
-    led3.Init(som.GetPin(10), true);
-    led3.Set(0.0f); 
 
     // RBG LEDs 
     led1.Init(som.GetPin(20), som.GetPin(19), som.GetPin(18), true);
@@ -85,23 +72,15 @@ struct DaisyPod {
     led2.Init(som.GetPin(17), som.GetPin(24), som.GetPin(23), true);
     led2.Set(0.0f, 0.0f, 0.0f); 
 
-    // DAC 
-    cvout1.bitdepth = daisy::DacHandle::BitDepth::BITS_12;
-    cvout1.buff_state = daisy::DacHandle::BufferState::ENABLED;
-    cvout1.mode = daisy::DacHandle::Mode::POLLING;
-    cvout1.chn = daisy::DacHandle::Channel::BOTH;
-    som.dac.Init(cvout1);
-    som.dac.WriteValue(daisy::DacHandle::Channel::BOTH, 0); 
-
     // Display
     
-    daisy::OledDisplay<daisy::SSD130x4WireSpi128x64Driver>::Config display_config;
-    display_config.driver_config.transport_config.Defaults();
-    
-    display.Init(display_config);
-      display.Fill(0);
-      display.Update();
-     
+        daisy::OledDisplay<daisy::SSD130x4WireSpi128x64Driver>::Config display_config;
+        display_config.driver_config.transport_config.Defaults();
+        
+        display.Init(display_config);
+          display.Fill(0);
+          display.Update();
+         
 
     som.adc.Start();
   }
@@ -124,7 +103,6 @@ struct DaisyPod {
    */
   void PostProcess()
   {
-    led3.Update();
     led1.Update();
     led2.Update();
   }
@@ -184,15 +162,11 @@ struct DaisyPod {
   // I/O Components
   daisy::AnalogControl knob1;
   daisy::AnalogControl knob2;
-  daisy::DacHandle::Config cvout1;
   daisy::Encoder encoder;
-  daisy::GateIn gatein;
-  daisy::Led led3;
   daisy::RgbLed led1;
   daisy::RgbLed led2;
   daisy::Switch sw1;
   daisy::Switch sw2;
-  daisy::Switch3 sw3;
   daisy::OledDisplay<daisy::SSD130x4WireSpi128x64Driver> display;
 
 };
