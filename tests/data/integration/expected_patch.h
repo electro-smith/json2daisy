@@ -239,7 +239,6 @@ struct DaisyPatch {
   dsy_gpio gateout;
   daisy::OledDisplay<daisy::SSD130x4WireSpi128x64Driver> display;
   daisy::MidiUartHandler midi;
-  daisy::MidiUsbHandler midiusb;
 
 };
 

@@ -256,8 +256,7 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
     if 'defines' in target:
         if target['defines'].get('OOPSY_TARGET_HAS_MIDI_INPUT'):
             target['has_midi'] = True
-            replacements['midi'] = """daisy::MidiUartHandler midi;
-  daisy::MidiUsbHandler midiusb;"""
+            replacements['midi'] = """daisy::MidiUartHandler midi;"""
 
     replacements['process'] = filter_map_template(
         components, 'process', key_exclude='default', match_exclude=True)

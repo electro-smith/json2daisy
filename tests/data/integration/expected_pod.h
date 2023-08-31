@@ -169,7 +169,6 @@ struct DaisyPod {
   daisy::Switch sw2;
   daisy::OledDisplay<daisy::SSD130x4WireSpi128x64Driver> display;
   daisy::MidiUartHandler midi;
-  daisy::MidiUsbHandler midiusb;
 
 };
 
