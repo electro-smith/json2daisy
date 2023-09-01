@@ -335,6 +335,7 @@ struct Daisy{{ name|capitalize }} {
   // I/O Components
   {{comps}}
   {{dispdec}}
+  {{midi}}
 
 };
 

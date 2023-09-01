@@ -253,6 +253,11 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
     else:
         replacements['display'] = ''
 
+    if 'defines' in target:
+        if target['defines'].get('OOPSY_TARGET_HAS_MIDI_INPUT'):
+            target['has_midi'] = True
+            replacements['midi'] = """daisy::MidiUartHandler midi;"""
+
     replacements['process'] = filter_map_template(
         components, 'process', key_exclude='default', match_exclude=True)
     replacements['loopprocess'] = filter_map_template(
@@ -316,7 +321,8 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
         'name': target['name'],
         'components': components,
         'aliases': target['aliases'],
-        'channels': audio_channels
+        'channels': audio_channels,
+        'has_midi': target.get('has_midi', False)
       }
 
     return rendered_header, board_info

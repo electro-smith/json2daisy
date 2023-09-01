@@ -260,6 +260,7 @@ struct DaisyField {
   daisy::Switch sw2;
   daisy::I2CHandle i2c;
   daisy::OledDisplay<daisy::SSD130x4WireSpi128x64Driver> display;
+  daisy::MidiUartHandler midi;
 
 };
 
