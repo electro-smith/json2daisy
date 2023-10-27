@@ -3,7 +3,7 @@ import json
 import os
 
 try:
-    from importlib_resources import files as resource_files
+    from importlib_resources import files as resource_files  # type: ignore
 except ImportError:
     from importlib.resources import files as resource_files
 
