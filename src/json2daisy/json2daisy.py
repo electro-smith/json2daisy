@@ -206,6 +206,8 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
         target['defines']['OOPSY_OLED_DISPLAY_WIDTH'] = target['display']['dim'][0]
         target['defines']['OOPSY_OLED_DISPLAY_HEIGHT'] = target['display']['dim'][1]
 
+        target['displayprocess'] = target['display'].get('process', '')
+
     replacements = {}
     replacements['name'] = target['name']
     replacements['som'] = som
@@ -324,7 +326,8 @@ def generate_header(board_description_dict: dict) -> 'tuple[str, dict]':
         'components': components,
         'aliases': target['aliases'],
         'channels': audio_channels,
-        'has_midi': target.get('has_midi', False)
+        'has_midi': target.get('has_midi', False),
+        'displayprocess': target.get('displayprocess', '')
       }
 
     return rendered_header, board_info
